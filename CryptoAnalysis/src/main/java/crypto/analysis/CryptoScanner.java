@@ -1,9 +1,7 @@
 package crypto.analysis;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.base.Stopwatch;
@@ -13,19 +11,17 @@ import boomerang.Query;
 import boomerang.debugger.Debugger;
 import boomerang.jimple.Statement;
 import boomerang.jimple.Val;
-import crypto.preanalysis.dotDataForRuleTree;
-import crypto.preanalysis.RuleTree;
-import crypto.preanalysis.TreeNode;
-import crypto.preanalysis.TreeNodeData;
+import crypto.extractparameter.CallSiteWithParamIndex;
+import crypto.extractparameter.ExtractedValue;
+import crypto.preanalysis.*;
 import crypto.predicates.PredicateHandler;
 import crypto.rules.CryptSLRule;
 import crypto.typestate.CryptSLMethodToSootMethod;
 import heros.utilities.DefaultValueMap;
 import ideal.IDEALSeedSolver;
-import soot.Scene;
-import soot.SootClass;
 import soot.SootMethod;
 import soot.Unit;
+import soot.jimple.internal.JAssignStmt;
 import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
 import sync.pds.solver.nodes.Node;
 import typestate.TransitionFunction;
@@ -82,13 +78,18 @@ public abstract class CryptoScanner {
 		initialize();
 		long elapsed = analysisWatch.elapsed(TimeUnit.SECONDS);
 		System.out.println("Discovered "+worklist.size() + " analysis seeds within " + elapsed + " seconds!");
+
+		List<IAnalysisSeed> listOfAnalysisSeeds = new ArrayList<>();
 		while (!worklist.isEmpty()) {
 			IAnalysisSeed curr = worklist.poll();
+            listOfAnalysisSeeds.add(curr);
 			getAnalysisListener().discoveredSeed(curr);
 			curr.execute();
 			estimateAnalysisTime();
 		}
 		
+        List<AllocationSitesWithUIDs> dataUIClassHierarchy = getHierarchyRelationshipData(listOfAnalysisSeeds);
+
 //		IDebugger<TypestateDomainValue<StateNode>> debugger = debugger();
 //		if (debugger instanceof CryptoVizDebugger) {
 //			CryptoVizDebugger ideVizDebugger = (CryptoVizDebugger) debugger;
@@ -103,6 +104,32 @@ public abstract class CryptoScanner {
 	}
 
 	
+
+
+    private List<AllocationSitesWithUIDs> getHierarchyRelationshipData(List<IAnalysisSeed> analysisSeeds){
+
+        List<AllocationSitesWithUIDs> androidUIClassHierarchy = new ArrayList<>(); // parent, child
+
+        for (IAnalysisSeed analysisSeed : analysisSeeds) {
+            if (analysisSeed instanceof AnalysisSeedWithSpecification){
+                for (Map.Entry<CallSiteWithParamIndex, ExtractedValue> entry : ((AnalysisSeedWithSpecification) analysisSeed).getExtractedValues().entries()) {
+                    String callSiteVariableName = "";
+                    String parameterVariableName = "";
+                    if(analysisSeed.stmt().getUnit().get() instanceof JAssignStmt){
+                        callSiteVariableName = ((JAssignStmt)analysisSeed.stmt().getUnit().get()).leftBox.getValue().toString();
+                    }
+                    if(entry.getValue().stmt().getUnit().get() instanceof JAssignStmt){
+                        parameterVariableName = ((JAssignStmt) entry.getValue().stmt().getUnit().get()).leftBox.getValue().toString();
+                    }
+
+
+                    androidUIClassHierarchy.add(new AllocationSitesWithUIDs(analysisSeed.stmt(),analysisSeed.stmt().hashCode(),callSiteVariableName,entry.getValue().stmt(),entry.getValue().stmt().hashCode(),parameterVariableName));
+                }
+
+            }
+        }
+        return androidUIClassHierarchy;
+    }
 
 	private void estimateAnalysisTime() {
 		int remaining = worklist.size();
