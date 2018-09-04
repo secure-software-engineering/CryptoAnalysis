@@ -112,7 +112,7 @@ public abstract class CryptoScanner {
 
         for (IAnalysisSeed analysisSeed : analysisSeeds) {
             if (analysisSeed instanceof AnalysisSeedWithSpecification){
-                for (Map.Entry<CallSiteWithParamIndex, ExtractedValue> entry : ((AnalysisSeedWithSpecification) analysisSeed).getExtractedValues().entries()) {
+                for (Map.Entry<CallSiteWithParamIndex, ExtractedValue> entry : ((AnalysisSeedWithSpecification) analysisSeed).getParameterAnalysis().getCollectedValues().entries()) {
                     String callSiteVariableName = "";
                     String parameterVariableName = "";
                     if(analysisSeed.stmt().getUnit().get() instanceof JAssignStmt){
