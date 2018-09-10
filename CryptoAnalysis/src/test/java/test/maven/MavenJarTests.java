@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,7 +50,7 @@ public class MavenJarTests {
 
 	public final static String MAVEN_PREFIX = "http://central.maven.org/maven2/";
 	private String currentDirectory = System.getProperty("user.dir");
-	public final static String DEFAULT_DOWNLOADS_FOLDER = "src/test/java/test/maven/downloads";
+	public final static String DEFAULT_DOWNLOADS_FOLDER = "mavenDownloads";
 	private static boolean VISUALIZATION = false;
 	private CrySLAnalysisListener errorCountingAnalysisListener;
 	private Table<String, Class<?>, Integer> errorMarkerCountPerErrorTypeAndMethod = HashBasedTable.create();
@@ -221,7 +222,6 @@ public class MavenJarTests {
 				concat(DEFAULT_DOWNLOADS_FOLDER).concat(File.separator).
 				concat(jarFileName)).getAbsolutePath();
 		HeadlessCryptoScanner scanner = createAnalysisFor(applicationCp);
-		Map<String, Map<String, Integer>> errors = currentJarBeingTested.errorTable.rowMap();
 		
 		for (Cell<String, String, Integer> cell: currentJarBeingTested.errorTable.cellSet()){
 		    setErrorsCount(cell.getRowKey(), Class.forName(cell.getColumnKey()), cell.getValue());
