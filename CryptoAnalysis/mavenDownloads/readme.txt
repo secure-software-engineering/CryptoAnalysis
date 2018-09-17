@@ -1,0 +1,1 @@
+This folder is for maven test cases to store the downloaded maven jars temporarily.
