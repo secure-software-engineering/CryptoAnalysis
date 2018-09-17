@@ -9,3 +9,5 @@ AndroidZooApps/
 .idea/
 /.metadata/
 *.DS_Store
+/.recommenders/
+CryptoAnalysis/mavenDownloads/*.jar

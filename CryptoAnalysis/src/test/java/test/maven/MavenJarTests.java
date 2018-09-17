@@ -223,8 +223,8 @@ public class MavenJarTests {
 				concat(jarFileName)).getAbsolutePath();
 		HeadlessCryptoScanner scanner = createAnalysisFor(applicationCp);
 		
-		for (Cell<String, String, Integer> cell: currentJarBeingTested.errorTable.cellSet()){
-		    setErrorsCount(cell.getRowKey(), Class.forName(cell.getColumnKey()), cell.getValue());
+		for (Cell<String, Class<?>, Integer> cell: currentJarBeingTested.errorTable.cellSet()){
+		    setErrorsCount(cell.getRowKey(), cell.getColumnKey(), cell.getValue());
 		}
 		scanner.exec();
 		deleteJar(jarFileName);
