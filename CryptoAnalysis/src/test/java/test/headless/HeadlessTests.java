@@ -121,7 +121,13 @@ public class HeadlessTests {
       
       setErrorsCount("<issue49.Main: java.security.PrivateKey getPrivateKey()>", ConstraintError.class,1);
       setErrorsCount("<issue49.Main: byte[] sign(java.lang.String)>", RequiredPredicateError.class,1);
-       
+      
+      setErrorsCount("<issue66.issueOne.simplified.Main: void main(java.lang.String[])>", ConstraintError.class, 1);
+      setErrorsCount("<issue66.issueOne.simplified.SecUtils: void init(javax.crypto.Cipher,int,java.security.Key)>", RequiredPredicateError.class, 1);
+      
+      setErrorsCount("<issue85.original.MsgDigest: byte[] of(java.io.InputStream)>", ImpreciseValueExtractionError.class, 1);
+      setErrorsCount("<issue85.original.MsgDigest: byte[] of(java.io.InputStream)>", ConstraintError.class, 1);
+      setErrorsCount("<issue85.original.MsgDigest: byte[] of(java.io.InputStream)>", TypestateError.class, 1);
 	  scanner.exec();
 	  assertErrors();
 	}

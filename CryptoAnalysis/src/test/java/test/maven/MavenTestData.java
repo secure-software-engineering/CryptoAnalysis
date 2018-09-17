@@ -86,7 +86,7 @@ public class MavenTestData {
 		errorDescs.clear();
 
 		errorDescs.add(MavenJar.FP
-				+ " - Calls to gets, digest and update are in order but md has been used before even it is declared. TypestateError may be because of this.");
+				+ " - Call to update is done inside for loop which converts to if and else statements in jimple. So, there exists a path with out update call which is reported by analysis.");
 		jar1.addErrors("<de.unkrig.commons.lang.crypto.MD5: byte[] of(java.io.InputStream)>",
 				TypestateError.class, errorDescs);
 		errorDescs.clear();
@@ -142,7 +142,7 @@ public class MavenTestData {
 				"<com.github.t3t5u.common.util.SecurityUtils: byte[] doDecrypt(javax.crypto.Cipher,java.security.Key,byte[])>",
 				TypestateError.class, errorDescs);
 		errorDescs.clear();
-		// TODO Make a test case.
+		//Test case - issue66.issueOne
 
 		errorDescs.add(MavenJar.FP
 				+ " - init is done in doInit function but analysis reports that init is not called before doFinal. (Cipher) if block");
