@@ -106,13 +106,13 @@ public class MavenTestData {
 				"<com.github.t3t5u.common.util.SecurityUtils: java.security.KeyPair generateKeyPair(java.lang.String)>",
 				TypestateError.class, errorDescs);
 		errorDescs.clear();
-
-		errorDescs.add(MavenJar.FP + " - ");
+		
+		// Test case - ReportedIssues: issue66.issueThree.simplified
+		errorDescs.add(MavenJar.FP + " - ForbiddenError is being called on cipher.init");
 		jar2.addErrors(
 				"<com.github.t3t5u.common.util.SecurityUtils: byte[] init(javax.crypto.Cipher,int,java.security.Key)>",
 				ForbiddenMethodError.class, errorDescs);
 		errorDescs.clear();
-		// TODO Ask Melani for the issue. Test case for nocallto.
 
 		errorDescs.add(MavenJar.TP + " - key is just a parameter. It can be passed as random or not.");
 		jar2.addErrors(
@@ -134,6 +134,7 @@ public class MavenTestData {
 				ImpreciseValueExtractionError.class, errorDescs);
 		errorDescs.clear();
 
+		//Test case - ReportedIssues: issue66.issueOne.simplified
 		errorDescs.add(MavenJar.FP
 				+ " - init is done in doInit function but analysis reports that init is not called before doFinal. (Cipher) if block");
 		errorDescs.add(MavenJar.FP
@@ -142,10 +143,11 @@ public class MavenTestData {
 				"<com.github.t3t5u.common.util.SecurityUtils: byte[] doDecrypt(javax.crypto.Cipher,java.security.Key,byte[])>",
 				TypestateError.class, errorDescs);
 		errorDescs.clear();
-		//Test case - issue66.issueOne
 
 		errorDescs.add(MavenJar.FP
 				+ " - init is done in doInit function but analysis reports that init is not called before doFinal. (Cipher) if block");
+		errorDescs.add(MavenJar.FP
+				+ " - init is done in doInit function but analysis reports that init is not called before doFinal. (Cipher) else block");
 		jar2.addErrors(
 				"<com.github.t3t5u.common.util.SecurityUtils: byte[] doEncrypt(javax.crypto.Cipher,java.security.Key,byte[])>",
 				TypestateError.class, errorDescs);
@@ -216,7 +218,7 @@ public class MavenTestData {
 				"<com.github.t3t5u.common.util.SecurityUtils: byte[] init(javax.crypto.Cipher,int,java.security.Key,java.security.spec.AlgorithmParameterSpec)>",
 				RequiredPredicateError.class, errorDescs);
 		errorDescs.clear();
-		// TODO Make a test case.
+		// Test case- ReportedIssues: issue66.issueTwo.simplified
 
 		errorDescs.add(MavenJar.TP
 				+ " - Just taking the subarray from input which is not properly randomised for IvParameterSpec (line 14 of IvParameterSpec.cryptsl)");
@@ -556,12 +558,12 @@ public class MavenTestData {
 
 		errorDescs = new ArrayList<>();
 		MavenJar jar6 = new MavenJar("com.github.emc-mongoose", "mongoose-storage-driver-atmos", "0.1.6");
-		errorDescs.add(MavenJar.TP + " - ");
+		errorDescs.add(MavenJar.FP + " - value of secret (first parameter) is not initialized or not known. It is passed as a parameter.");
 		jar6.addErrors(
 				"<com.emc.mongoose.storage.driver.atmos.AtmosStorageDriver: javax.crypto.Mac lambda$static$0(java.lang.String)>",
 				IncompleteOperationError.class, errorDescs);
 		errorDescs.clear();
-		errorDescs.add(MavenJar.TP + " - ");
+		errorDescs.add(MavenJar.TP);
 		jar6.addErrors(
 				"<com.emc.mongoose.storage.driver.atmos.AtmosStorageDriver: javax.crypto.Mac lambda$static$0(java.lang.String)>",
 				RequiredPredicateError.class, errorDescs);
