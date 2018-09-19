@@ -12,9 +12,7 @@ public class SecUtils {
 	 * If the function depth is more than 2 then analysis becomes imprecise. Here, the depth of the function call is 3 where 
 	 * cipher.init is called.*/
 	public static void init(Cipher cipher, int opmode, Key key) throws InvalidKeyException {
-		int x = 1;
 		cipher.init(opmode, key);
-		int y = 10;
 	}
 	
 	public static void doInit(Cipher cipher, int opmode, Key key) throws InvalidKeyException {
