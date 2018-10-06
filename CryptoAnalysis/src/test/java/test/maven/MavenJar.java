@@ -8,8 +8,23 @@ import com.google.common.collect.Table;
 public class MavenJar {
 	String groupId, artifactId, version;
 	Table<String, Class<?>, Integer> errorTable;
-	public static final String FP = "false_positive", TP =  "true_postive", FN = "false_negative";
-	
+	public static enum findingType {
+		TRUE_POSITIVE {
+			public String toString() {
+				return "TruePositive";
+			}
+		},
+		FALSE_POSITIVE {
+			public String toString() {
+				return "FalsePositive";
+			}
+		},
+		FALSE_NEGATIVE {
+			public String toString() {
+				return "FalseNegative";
+			}
+		}
+	};
 	public MavenJar(String grpId, String artId, String ver) {
 		groupId = grpId;
 		artifactId = artId;
