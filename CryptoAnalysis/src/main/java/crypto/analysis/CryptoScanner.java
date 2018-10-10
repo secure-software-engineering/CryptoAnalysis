@@ -1,5 +1,6 @@
 package crypto.analysis;
 
+import java.io.StringWriter;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -21,10 +22,13 @@ import heros.utilities.DefaultValueMap;
 import ideal.IDEALSeedSolver;
 import soot.SootMethod;
 import soot.Unit;
-import soot.jimple.internal.JAssignStmt;
 import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
 import sync.pds.solver.nodes.Node;
 import typestate.TransitionFunction;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 public abstract class CryptoScanner {
 
@@ -33,6 +37,9 @@ public abstract class CryptoScanner {
 	private final List<ClassSpecification> specifications = Lists.newLinkedList();
 	private final PredicateHandler predicateHandler = new PredicateHandler(this);
 	private CrySLResultsReporter resultsAggregator = new CrySLResultsReporter();
+	private Map<IAnalysisSeed, BaseObject> mapOfBaseObjects;
+	private int counterForIDs;
+    private List<IAnalysisSeed> listOfAnalysisSeeds;
 
 	
 
@@ -79,7 +86,8 @@ public abstract class CryptoScanner {
 		long elapsed = analysisWatch.elapsed(TimeUnit.SECONDS);
 		System.out.println("Discovered "+worklist.size() + " analysis seeds within " + elapsed + " seconds!");
 
-		List<IAnalysisSeed> listOfAnalysisSeeds = new ArrayList<>();
+		//List<AllocationSitesWithUIDs> dataForUIClassHeirarchy = new ArrayList<>();
+		listOfAnalysisSeeds = new ArrayList<>();
 		while (!worklist.isEmpty()) {
 			IAnalysisSeed curr = worklist.poll();
             listOfAnalysisSeeds.add(curr);
@@ -87,14 +95,59 @@ public abstract class CryptoScanner {
 			curr.execute();
 			estimateAnalysisTime();
 		}
+
+        mapOfBaseObjects = new HashMap<>();
+		counterForIDs = 0;
+
+        for (IAnalysisSeed analysisSeed : listOfAnalysisSeeds) {
+            BaseObject baseObjectForSeed = baseObjectForSeed(analysisSeed);
+			//counterForIDs = counterForIDs + 1;
+            //mapOfBaseObjects.put(analysisSeed, new BaseObject(analysisSeed.stmt(), counterForIDs, ""));
+
+        }
+        
 		
-        List<AllocationSitesWithUIDs> dataUIClassHierarchy = getHierarchyRelationshipData(listOfAnalysisSeeds);
+        /*List<AllocationSitesWithUIDs> dataUIClassHierarchy = getHierarchyRelationshipData(listOfAnalysisSeeds);
+
+		for (AllocationSitesWithUIDs allocationSitesWithUIDs : dataUIClassHierarchy) {
+			System.out.println("callsite id : " + Integer.toString(allocationSitesWithUIDs.getCallSiteUID()) + " ; variable name : " + allocationSitesWithUIDs.getCallSiteVariableName() + " ; callsite : " + allocationSitesWithUIDs.getAllocationSiteForCallSite());
+			System.out.println("allocationsite id : " + Integer.toString(allocationSitesWithUIDs.getParameterUID())  + " ; variable name : " + allocationSitesWithUIDs.getParameterVariableName()+ " ; allocationsite : " + allocationSitesWithUIDs.getAllocationSiteForParameter());
+		}*/
 
 //		IDebugger<TypestateDomainValue<StateNode>> debugger = debugger();
 //		if (debugger instanceof CryptoVizDebugger) {
 //			CryptoVizDebugger ideVizDebugger = (CryptoVizDebugger) debugger;
 //			ideVizDebugger.addEnsuredPredicates(this.existingPredicates);
 //		}
+
+        BaseObjects baseObjects = new BaseObjects();
+        baseObjects.setBaseObjects(new ArrayList<>());
+        for (BaseObject value : mapOfBaseObjects.values()) {
+            baseObjects.getBaseObjects().add(value);
+        }
+
+
+        //baseObjects.setBaseObjects((List)mapOfBaseObjects.values());
+
+        StringWriter forString = new StringWriter();
+        try {
+            JAXBContext context = JAXBContext.newInstance(BaseObjects.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(baseObjects, forString);
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+
+
+        System.out.println(forString.toString());
+
+       /* for (Object o : mapOfBaseObjects.keySet().toArray()) {
+            System.out.println(mapOfBaseObjects.get(o).returnXMLNode());
+        }*/
+
+
+        //System.out.println(mapOfBaseObjects.get(mapOfBaseObjects.keySet().toArray()[0]).returnXMLNode());
 		predicateHandler.checkPredicates();
 		
 		getAnalysisListener().afterAnalysis();
@@ -103,8 +156,123 @@ public abstract class CryptoScanner {
 //		debugger().afterAnalysis();
 	}
 
-	
 
+
+    // should the param here be alloc site?
+	private BaseObject baseObjectForSeed(IAnalysisSeed analysisSeedParam){
+        if(mapOfBaseObjects.containsKey(analysisSeedParam)){
+            return mapOfBaseObjects.get(analysisSeedParam);
+        } else{
+            // unique ids for each new base object.
+            counterForIDs = counterForIDs + 1;
+            // change the third param to rule name.
+            BaseObject tmpBaseObject = new BaseObject(analysisSeedParam.stmt(), counterForIDs, analysisSeedParam.toString());
+			mapOfBaseObjects.put(analysisSeedParam, tmpBaseObject);
+            // go through the parameters
+            if (analysisSeedParam instanceof AnalysisSeedWithSpecification){
+                for (Map.Entry<CallSiteWithParamIndex, ExtractedValue> entry : ((AnalysisSeedWithSpecification) analysisSeedParam).getParameterAnalysis().getCollectedValues().entries()) {
+                    for (IAnalysisSeed analysisSeed : listOfAnalysisSeeds) {
+                        if (analysisSeed.stmt().equals(entry.getValue().stmt())){
+                            /*if (mapOfBaseObjects.containsKey(analysisSeed)){
+
+                            }*/
+                            // Change the first parameter to the name of the type of parameter.
+                            mapOfBaseObjects.get(analysisSeedParam).getMapOfParameters().put(analysisSeed.toString(),baseObjectForSeed(analysisSeed));
+                            //tmpBaseObject.getMapOfParameters().put(analysisSeed.toString(),baseObjectForSeed(analysisSeed));
+                        }
+                    }
+
+
+                    
+
+                }
+            }
+
+
+            // call baseObjectForSeed for each parameter pass alloc site
+            // add base object to the map
+
+        }
+        return null;
+    }
+	/*private void writeDotFile(List<AllocationSitesWithUIDs> dataUIClassHierarchy){
+
+        Map<String, String> nodes = new HashMap<>();
+        Map<String, Map.Entry<String, String>> edges = new HashMap<>();
+
+        for (AllocationSitesWithUIDs allocationSitesWithUIDs : dataUIClassHierarchy) {
+            nodes.put(allocationSitesWithUIDs.getAllocationSiteForCallSite().toString().replace(" ","_").replace("=","").replace("$","_").replace("\"","")
+                    ,allocationSitesWithUIDs.getAllocationSiteForCallSite().toString().replace(" ","_").replace("=","").replace("$","_").replace("\"",""));
+            nodes.put(allocationSitesWithUIDs.getAllocationSiteForParameter().toString().replace(" ","_").replace("=","").replace("$","_").replace("\"","")
+                    ,allocationSitesWithUIDs.getAllocationSiteForParameter().toString().replace(" ","_").replace("=","").replace("$","_").replace("\"",""));
+            edges.put(allocationSitesWithUIDs.getAllocationSiteForCallSite().toString().replace(" ","_").replace("=","").replace("$","_")
+                            + allocationSitesWithUIDs.getAllocationSiteForParameter().toString().replace(" ","_").replace("=","").replace("$","_").replace("\"",""),
+            new AbstractMap.SimpleEntry<>(allocationSitesWithUIDs.getAllocationSiteForCallSite().toString().replace(" ","_").replace("=","").replace("$","_").replace("\"","")
+                    ,allocationSitesWithUIDs.getAllocationSiteForParameter().toString().replace(" ","_").replace("=","").replace("$","_").replace("\"","")));
+        }
+
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("digraph G { \n");
+        builder.append(" rankdir=LR;\n");
+        builder.append(" node[shape=box];\n");
+
+        for (Map.Entry<String, String> stringStringEntry : nodes.entrySet()) {
+            builder.append(stringStringEntry.getKey());
+            builder.append(" ");
+            builder.append("[label=\"");
+            builder.append(stringStringEntry.getValue());
+            builder.append("\"]");
+            builder.append(";\n");
+        }
+
+        for (Map.Entry<String, Map.Entry<String, String>> stringEntryEntry : edges.entrySet()) {
+            Map.Entry<String, String> single = stringEntryEntry.getValue();
+
+            builder.append(single.getKey());
+            builder.append(" -> ");
+            builder.append(single.getValue());
+            builder.append("[label=\"");
+            builder.append(stringEntryEntry.getKey());
+            builder.append("\"]");
+            builder.append(";\n");
+        }
+
+
+        builder.append("}");
+        System.out.println(builder.toString());
+    }
+
+    public Map<Integer, TreeNode<AllocationSiteWithUID>> createXMLFile(List<AllocationSitesWithUIDs> dataUIClassHierarchy){
+
+
+		// The set of allocation sites with a custom assigned UID.
+		Map<Integer, TreeNode<AllocationSiteWithUID>> mapOfAllocationSites = new HashMap<>();
+
+
+		int count = 0;
+		// Get all of the unique allocation sites.
+		for (AllocationSitesWithUIDs alloc : dataUIClassHierarchy) {
+
+            if (!mapOfAllocationSites.keySet().contains(alloc.getCallSite().getAllocationSiteUID())){
+
+				mapOfAllocationSites.put(alloc.getCallSite().getAllocationSiteUID(), new TreeNode<>(alloc.getCallSite()));
+			}
+			if (!mapOfAllocationSites.keySet().contains(alloc.getParameterAllocSite().getAllocationSiteUID())){
+				mapOfAllocationSites.put(alloc.getParameterAllocSite().getAllocationSiteUID(), new TreeNode<>(alloc.getParameterAllocSite()));
+			}
+		}
+
+		for (AllocationSitesWithUIDs alloc : dataUIClassHierarchy) {
+			if (mapOfAllocationSites.containsKey(alloc.getCallSite().getAllocationSiteUID())){
+				mapOfAllocationSites.get(alloc.getCallSite().getAllocationSiteUID()).addChild(alloc.getParameterAllocSite());
+			}
+		}
+
+		return mapOfAllocationSites;
+
+
+	}
 
     private List<AllocationSitesWithUIDs> getHierarchyRelationshipData(List<IAnalysisSeed> analysisSeeds){
 
@@ -128,8 +296,10 @@ public abstract class CryptoScanner {
 
             }
         }
+        writeDotFile(androidUIClassHierarchy);
+		createXMLFile(androidUIClassHierarchy);
         return androidUIClassHierarchy;
-    }
+    }*/
 
 	private void estimateAnalysisTime() {
 		int remaining = worklist.size();

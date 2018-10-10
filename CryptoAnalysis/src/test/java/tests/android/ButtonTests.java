@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import org.junit.Test;
-import test.UsagePatternTestingFramework;
+import test.UIExtractionFrameworkBasedOnUPTF;
 import test.assertions.Assertions;
 
-public class ButtonTests extends UsagePatternTestingFramework{
+public class ButtonTests extends UIExtractionFrameworkBasedOnUPTF {
 
     @Test
     public void buttonTest(){
