@@ -3,6 +3,7 @@ package crypto.analysis;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -291,7 +292,7 @@ public class AnalysisSeedWithSpecification extends IAnalysisSeed {
 			Type baseType = accessGraph.value().getType();
 			if (baseType instanceof RefType) {
 				RefType refType = (RefType) baseType;
-				if (spec.getRule().getClassName().equals(refType.getSootClass().getShortName())) {
+				if (spec.getRule().getClassName().equals(refType.getSootClass().getName())) {
 					if (satisfiesConstraintSytem) {
 					AnalysisSeedWithSpecification seed = cryptoScanner.getOrCreateSeedWithSpec(
 							new AnalysisSeedWithSpecification(cryptoScanner, currStmt, accessGraph, spec));
@@ -413,8 +414,8 @@ public class AnalysisSeedWithSpecification extends IAnalysisSeed {
 			} else if (pred.getInvolvedVarNames().contains(var)) {
 
 				final String parameterI = ensPred.getPredicate().getParameters().get(i).getName();
-				Collection<String> actVals = null;
-				Collection<String> expVals = null;
+				Collection<String> actVals = Collections.emptySet();
+				Collection<String> expVals = Collections.emptySet();
 
 				for (CallSiteWithParamIndex cswpi : ensPred.getParametersToValues().keySet()) {
 					if (cswpi.getVarName().equals(parameterI)) {
