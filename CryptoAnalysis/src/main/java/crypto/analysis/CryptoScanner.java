@@ -12,6 +12,7 @@ import boomerang.Query;
 import boomerang.debugger.Debugger;
 import boomerang.jimple.Statement;
 import boomerang.jimple.Val;
+import crypto.Utils;
 import crypto.extractparameter.CallSiteWithParamIndex;
 import crypto.extractparameter.ExtractedValue;
 import crypto.preanalysis.*;
@@ -20,6 +21,8 @@ import crypto.rules.CryptSLRule;
 import crypto.typestate.CryptSLMethodToSootMethod;
 import heros.utilities.DefaultValueMap;
 import ideal.IDEALSeedSolver;
+import soot.Scene;
+import soot.SootClass;
 import soot.SootMethod;
 import soot.Unit;
 import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
@@ -165,8 +168,12 @@ public abstract class CryptoScanner {
         } else{
             // unique ids for each new base object.
             counterForIDs = counterForIDs + 1;
-            // change the third param to rule name.
-            BaseObject tmpBaseObject = new BaseObject(analysisSeedParam.stmt(), counterForIDs, analysisSeedParam.toString());
+
+            CryptSLRule ruleFromAnalysisSeedParam = ((AnalysisSeedWithSpecification) analysisSeedParam).getSpec().getRule();
+            SootClass sootClassVarForAnalysisSeedParam = Scene.v().forceResolve(Utils.getFullyQualifiedName(ruleFromAnalysisSeedParam), SootClass.HIERARCHY);
+            // The first parameter is the allocation site, 2nd is the unique id, and the third is the rule name.
+            BaseObject tmpBaseObject = new BaseObject(analysisSeedParam.stmt(), counterForIDs, ruleFromAnalysisSeedParam.getClassName(), sootClassVarForAnalysisSeedParam, analysisSeedParam.stmt().getMethod().toString().replace("<","").replace(">",""));
+            //BaseObject tmpBaseObject = new BaseObject(analysisSeedParam.stmt(), counterForIDs, analysisSeedParam.toString());
 			mapOfBaseObjects.put(analysisSeedParam, tmpBaseObject);
             // go through the parameters
             if (analysisSeedParam instanceof AnalysisSeedWithSpecification){

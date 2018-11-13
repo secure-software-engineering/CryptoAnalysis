@@ -8,7 +8,7 @@ import java.util.List;
 //@XmlAccessorType(XmlAccessType.FIELD)
 public class BaseObjects {
 
-    @XmlElement(name = "BaseObject")
+    //@XmlElement(name = "BaseObject")
     private List<BaseObject> listOfBaseObjects = null;
 
     public List<BaseObject> getBaseObjects() {

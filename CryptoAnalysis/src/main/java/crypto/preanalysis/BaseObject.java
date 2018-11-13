@@ -29,10 +29,22 @@ public class BaseObject {
 
     // map of parameters
     private Multimap<String, BaseObject> mapOfParameters;
+
+    // name of the method
+    private String methodName;
     // default constructor required for the xml conversion
     public BaseObject() {
     }
 
+    public BaseObject(Statement allocationSite, int id, String ruleName, SootClass sootClass, String methodName) {
+        this.allocationSite = allocationSite;
+        this.id = id;
+        this.ruleName = ruleName;
+        mapOfParameters = ArrayListMultimap.create();
+        this.sootClass = sootClass;
+        this.methodName = methodName;
+    }
+    // For testing
     public BaseObject(Statement allocationSite, int id, String ruleName) {
         this.allocationSite = allocationSite;
         this.id = id;
@@ -81,7 +93,7 @@ public class BaseObject {
     public SootClass getSootClass() {
         return sootClass;
     }
-    //@XmlElement
+    @XmlAttribute
     public String getSootClassString(){
         return sootClass.toString();
     }
@@ -107,5 +119,9 @@ public class BaseObject {
             e.printStackTrace();
         }
         return forString.toString();
+    }
+    @XmlAttribute
+    public String getMethodName() {
+        return methodName;
     }
 }
