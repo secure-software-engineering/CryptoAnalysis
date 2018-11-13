@@ -1,0 +1,7 @@
+SPEC tests.android.treetests.Nine
+OBJECTS
+	java.lang.String string;
+EVENTS
+	nine: methodNine(string);
+ORDER
+nine

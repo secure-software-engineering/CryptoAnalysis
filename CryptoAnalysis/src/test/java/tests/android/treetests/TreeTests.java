@@ -52,72 +52,90 @@ public class TreeTests  extends MockedUsagePatternTestingFramework {
 
      */
 
+    /**
+     * Classes placed according to the defined hierarchy
+     */
     @Test
-    // Classes placed according to the defined hierarchy
     public void baseHierarchy(){
         Assertions.classesToMock("java.lang.Object,tests.android.treetests.One,tests.android.treetests.Three,tests.android.treetests.Four," +
                 "tests.android.treetests.Seven,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six,tests.android.treetests.Nine");
     }
 
+    /**
+     * Classes placed according to the numerical sequence
+     */
     @Test
-    // Classes placed according to the numerical sequence
     public void baseHierarchyMixed(){
         Assertions.classesToMock("java.lang.Object,tests.android.treetests.One,tests.android.treetests.Two,tests.android.treetests.Three," +
                 "tests.android.treetests.Four,tests.android.treetests.Five,tests.android.treetests.Six,tests.android.treetests.Seven," +
                 "tests.android.treetests.Eight,tests.android.treetests.Nine");
     }
 
+    /**
+     * Exchanged six and nine
+     */
     @Test
-    // Exchanged six and nine
     public void exchangeAtLeafNode(){
         Assertions.classesToMock("java.lang.Object,tests.android.treetests.One,tests.android.treetests.Three,tests.android.treetests.Four," +
                 "tests.android.treetests.Seven,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Nine,tests.android.treetests.Six");
     }
 
+    /**
+     * Removed three, moved one after four
+     */
     @Test
-    // Removed three, moved one after four
     public void exchangeWithinTree(){
         Assertions.classesToMock("java.lang.Object,tests.android.treetests.Four,tests.android.treetests.One," +
                 "tests.android.treetests.Seven,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six,tests.android.treetests.Nine");
     }
 
+    /**
+     * Keeping three, moved one after four
+     */
     @Test
-    // Keeping three, moved one after four
     public void exchangeWithinTree2(){
         Assertions.classesToMock("java.lang.Object,tests.android.treetests.Three,tests.android.treetests.Four,tests.android.treetests.One," +
                 "tests.android.treetests.Seven,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six,tests.android.treetests.Nine");
     }
 
+    /**
+     * Object is the last in the list.
+     */
     @Test
-    // Object is the last in the list.
     public void baseHierarchyObjectLast(){
         Assertions.classesToMock("tests.android.treetests.One,tests.android.treetests.Three,tests.android.treetests.Four," +
                 "tests.android.treetests.Seven,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six,tests.android.treetests.Nine,java.lang.Object");
     }
 
+    /**
+     * Three and Eight added first.
+     */
     @Test
-    // Three and Eight added first.
     public void threeAndEightAddedEarlier(){
         Assertions.classesToMock("tests.android.treetests.Three,tests.android.treetests.Eight,java.lang.Object,tests.android.treetests.One,tests.android.treetests.Four," +
                 "tests.android.treetests.Seven,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six,tests.android.treetests.Nine");
     }
 
+    /**
+     * Four and Nine added first
+     */
     @Test
-    // Four and Nine added first
     public void fourAndNineAddedEarlier(){
         Assertions.classesToMock("tests.android.treetests.Four,tests.android.treetests.Nine,java.lang.Object,tests.android.treetests.One,tests.android.treetests.Three," +
                 "tests.android.treetests.Seven,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six");
     }
 
+    /**
+     * Object is at the end
+     */
     @Test
-    // Object is at the end
     public void objectAtEnd() {
         Assertions.classesToMock("tests.android.treetests.One,tests.android.treetests.Three,tests.android.treetests.Four," +
                 "tests.android.treetests.Seven,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
@@ -125,27 +143,42 @@ public class TreeTests  extends MockedUsagePatternTestingFramework {
 
     }
 
+    /**
+     * Object class inserted after Seven
+     */
     @Test
-    // Object class inserted after Seven
     public void randomObjectInsertion(){
         Assertions.classesToMock("tests.android.treetests.One,tests.android.treetests.Three,tests.android.treetests.Four," +
                 "tests.android.treetests.Seven,java.lang.Object,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six,tests.android.treetests.Nine");
     }
 
+    /**
+     * Rule for Eight present in the tree.
+     */
     @Test
-    // Rule for Eight present in the tree.
     public void idCorrectRule(){
         Assertions.classesToMock("java.lang.Object,tests.android.treetests.One,tests.android.treetests.Three,tests.android.treetests.Four," +
                 "tests.android.treetests.Seven,tests.android.treetests.Eight,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six,tests.android.treetests.Nine");
     }
 
+    /**
+     * Rule for Eight absent in the tree.
+     */
     @Test
-    // Rule for Eight absent in the tree.
     public void idCorrectRule2(){
         Assertions.classesToMock("java.lang.Object,tests.android.treetests.One,tests.android.treetests.Three,tests.android.treetests.Four," +
                 "tests.android.treetests.Seven,tests.android.treetests.Two,tests.android.treetests.Five," +
                 "tests.android.treetests.Six,tests.android.treetests.Nine");
     }
+
+    @Test
+    public void checkParametersToValuesData(){
+        Eight eight = new Eight();
+        eight.methodEight("Teszt");
+        eight.methodFour("four");
+        eight.methodOne("one");
+    }
+
 }

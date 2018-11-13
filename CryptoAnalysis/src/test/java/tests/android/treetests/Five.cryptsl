@@ -1,0 +1,7 @@
+SPEC tests.android.treetests.Five
+OBJECTS
+	java.lang.String string;
+EVENTS
+	five: methodFive(string);
+ORDER
+five

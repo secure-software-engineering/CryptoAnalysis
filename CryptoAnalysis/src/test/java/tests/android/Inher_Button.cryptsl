@@ -1,0 +1,7 @@
+SPEC tests.android.Inher_Button
+OBJECTS
+	java.lang.String string;
+EVENTS
+	text: setSomeText(string);
+ORDER
+text

@@ -1,0 +1,7 @@
+SPEC tests.android.treetests.Six
+OBJECTS
+	java.lang.String string;
+EVENTS
+	six: methodSix(string);
+ORDER
+six

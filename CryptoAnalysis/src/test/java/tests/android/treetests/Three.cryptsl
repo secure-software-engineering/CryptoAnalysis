@@ -1,0 +1,7 @@
+SPEC tests.android.treetests.Three
+OBJECTS
+	java.lang.String string;
+EVENTS
+	three: methodThree(string);
+ORDER
+three

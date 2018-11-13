@@ -1,0 +1,7 @@
+SPEC tests.android.treetests.Eight
+OBJECTS
+	java.lang.String string;
+EVENTS
+	eight: methodEight(string);
+ORDER
+eight

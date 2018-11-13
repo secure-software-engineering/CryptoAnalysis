@@ -1,0 +1,7 @@
+SPEC tests.android.treetests.Inher_File
+OBJECTS
+	int testInt;
+EVENTS
+	test: testMethod(testInt);
+ORDER
+test

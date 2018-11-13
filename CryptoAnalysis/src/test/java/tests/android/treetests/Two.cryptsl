@@ -1,0 +1,7 @@
+SPEC tests.android.treetests.Two
+OBJECTS
+	java.lang.String string;
+EVENTS
+	two: methodTwo(string);
+ORDER
+two
