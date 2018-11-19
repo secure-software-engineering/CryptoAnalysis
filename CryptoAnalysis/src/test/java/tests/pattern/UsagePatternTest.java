@@ -5,6 +5,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
+import java.security.Key;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
@@ -595,7 +596,6 @@ public class UsagePatternTest extends UsagePatternTestingFramework {
 
 		char[] falsePwd = "password".toCharArray();
 		final PBEKeySpec pbekeyspec = new PBEKeySpec(falsePwd, salt, 65000, 128);
-		//		Assertions.violatedConstraint(pbekeyspec);
 		Assertions.extValue(0);
 		Assertions.extValue(1);
 		Assertions.extValue(2);
@@ -1027,14 +1027,14 @@ public class UsagePatternTest extends UsagePatternTestingFramework {
 	@Test
 	public void secretKeyTest() throws NoSuchAlgorithmException, DestroyFailedException {
 		KeyGenerator c = KeyGenerator.getInstance("AES");
-		SecretKey key = c.generateKey();
+		Key key = c.generateKey();
 		Assertions.mustBeInAcceptingState(key);
 		byte[] enc = key.getEncoded();
 		Assertions.mustBeInAcceptingState(key);
 		enc = key.getEncoded();
 
 		Assertions.mustBeInAcceptingState(key);
-		key.destroy();
+		((SecretKey) key).destroy();
 		Assertions.mustBeInAcceptingState(key);
 	}
 

@@ -50,24 +50,26 @@ public class HeadlessTests {
 
 		setErrorsCount("<example.ConstraintErrorExample: void main(java.lang.String[])>", ConstraintError.class, 1);
 
-		setErrorsCount("<example.PredicateMissingExample: void main(java.lang.String[])>", RequiredPredicateError.class, 1);
+		setErrorsCount("<example.PredicateMissingExample: void main(java.lang.String[])>", RequiredPredicateError.class,
+				1);
 		setErrorsCount("<example.PredicateMissingExample: void main(java.lang.String[])>", ConstraintError.class, 1);
-
 
 		setErrorsCount("<example.TypestateErrorExample: void main(java.lang.String[])>", TypestateError.class, 1);
 
-		setErrorsCount("<example.IncompleOperationErrorExample: void main(java.lang.String[])>", IncompleteOperationError.class, 2);
+		setErrorsCount("<example.IncompleOperationErrorExample: void main(java.lang.String[])>",
+				IncompleteOperationError.class, 2);
 
-		setErrorsCount("<example.ImpreciseValueExtractionErrorExample: void main(java.lang.String[])>", ImpreciseValueExtractionError.class, 1);
-		
+		setErrorsCount("<example.ImpreciseValueExtractionErrorExample: void main(java.lang.String[])>",
+				ImpreciseValueExtractionError.class, 1);
+
 		scanner.exec();
 		assertErrors();
 	}
 
 	@Test
 	public void fileEncryptor() {
-	  String sootClassPath = new File("../CryptoAnalysisTargets/FileEncryptor/bin").getAbsolutePath();
-	  HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
+		String sootClassPath = new File("../CryptoAnalysisTargets/FileEncryptor/bin").getAbsolutePath();
+		HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
 
 		scanner.exec();
 		assertErrors();
@@ -75,80 +77,84 @@ public class HeadlessTests {
 
 	@Test
 	public void longTermArchiver() {
-	  String sootClassPath = new File("../CryptoAnalysisTargets/LongTermArchiver/bin").getAbsolutePath();
-	  HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
+		String sootClassPath = new File("../CryptoAnalysisTargets/LongTermArchiver/bin").getAbsolutePath();
+		HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
 
-
-	  scanner.exec();
-	  assertErrors();
+		scanner.exec();
+		assertErrors();
 	}
 
 	@Test
 	public void secureFileTransmitter() {
-	  String sootClassPath = new File("../CryptoAnalysisTargets/SecureFileTransmitter/bin").getAbsolutePath();
-	  HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
+		String sootClassPath = new File("../CryptoAnalysisTargets/SecureFileTransmitter/bin").getAbsolutePath();
+		HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
 
-
-	  scanner.exec();
-	  assertErrors();
+		scanner.exec();
+		assertErrors();
 	}
 
 	@Test
 	public void userAuthenticator() {
-	  String sootClassPath = new File("../CryptoAnalysisTargets/UserAuthenticator/bin").getAbsolutePath();
-	  HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
+		String sootClassPath = new File("../CryptoAnalysisTargets/UserAuthenticator/bin").getAbsolutePath();
+		HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
 
-	  scanner.exec();
-	  assertErrors();
+		scanner.exec();
+		assertErrors();
 	}
 
 	@Test
 	public void reportedIssues() {
-	  String sootClassPath = new File("../CryptoAnalysisTargets/ReportedIssues/bin").getAbsolutePath();
-	  HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
-	  
-	  setErrorsCount("<issue81.Encryption: byte[] encrypt(byte[],javax.crypto.SecretKey)>", ConstraintError.class, 1);
-	  
-	  setErrorsCount("<issue81.Encryption: byte[] encrypt(byte[],javax.crypto.SecretKey)>", RequiredPredicateError.class, 1);
+		String sootClassPath = new File("../CryptoAnalysisTargets/ReportedIssues/bin").getAbsolutePath();
+		HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
 
-	  setErrorsCount("<issue81.Encryption: javax.crypto.SecretKey generateKey(java.lang.String)>", IncompleteOperationError.class, 1);
-	  setErrorsCount("<issue81.Encryption: javax.crypto.SecretKey generateKey(java.lang.String)>", RequiredPredicateError.class, 3);
-	  setErrorsCount("<issue81.Encryption: javax.crypto.SecretKey generateKey(java.lang.String)>", NeverTypeOfError.class, 1);
-	  setErrorsCount("<issue81.Encryption: javax.crypto.SecretKey generateKey(java.lang.String)>", ConstraintError.class, 1);
-		
-	  setErrorsCount("<issue81.Main: void main(java.lang.String[])>", IncompleteOperationError.class, 1);
-	  setErrorsCount("<issue81.Main: void main(java.lang.String[])>", NeverTypeOfError.class, 1);
+		setErrorsCount("<issue81.Encryption: byte[] encrypt(byte[],javax.crypto.SecretKey)>", ConstraintError.class, 1);
 
-	  setErrorsCount("<issueCogniCrypt210.CogniCryptSecretKeySpec: void main(java.lang.String[])>", ConstraintError.class, 0);
-	  setErrorsCount("<issueCogniCrypt210.CogniCryptSecretKeySpec: void main(java.lang.String[])>", RequiredPredicateError.class, 0);
-	  
-      setErrorsCount("<issue70.ClientProtocolDecoder: byte[] decryptAES(byte[])>", ConstraintError.class, 1);
-      setErrorsCount("<issue70.ClientProtocolDecoder: byte[] decryptAES(byte[])>", RequiredPredicateError.class, 3);
-      
-      setErrorsCount("<issue68.Main: void main(java.lang.String[])>", IncompleteOperationError.class, 2);
-      
-      
-      setErrorsCount("<issue68.AESCryptor: byte[] getKey(java.lang.String)>", NeverTypeOfError.class, 1);
-      setErrorsCount("<issue68.AESCryptor: byte[] getKey(java.lang.String)>", RequiredPredicateError.class, 2);
-      setErrorsCount("<issue68.AESCryptor: byte[] getKey(java.lang.String)>", IncompleteOperationError.class, 1);
-      setErrorsCount("<issue68.AESCryptor: javax.crypto.SecretKeyFactory getFactory()>", ConstraintError.class, 1);
-      setErrorsCount("<issue68.AESCryptor: byte[] encryptImpl(byte[])>", RequiredPredicateError.class, 1);
-      
-      setErrorsCount("<issue68.AESCryptor: void <init>(byte[])>", RequiredPredicateError.class, 1);
-      setErrorsCount("<issue68.AESCryptor: byte[] decryptImpl(byte[])>", RequiredPredicateError.class, 2);
-      
-      setErrorsCount("<issue49.Main: java.security.PrivateKey getPrivateKey()>", ConstraintError.class,1);
-      setErrorsCount("<issue49.Main: byte[] sign(java.lang.String)>", RequiredPredicateError.class,1);
-      
-	  scanner.exec();
-	  assertErrors();
+		setErrorsCount("<issue81.Encryption: byte[] encrypt(byte[],javax.crypto.SecretKey)>",
+				RequiredPredicateError.class, 1);
+
+		setErrorsCount("<issue81.Encryption: javax.crypto.SecretKey generateKey(java.lang.String)>",
+				IncompleteOperationError.class, 1);
+		setErrorsCount("<issue81.Encryption: javax.crypto.SecretKey generateKey(java.lang.String)>",
+				RequiredPredicateError.class, 3);
+		setErrorsCount("<issue81.Encryption: javax.crypto.SecretKey generateKey(java.lang.String)>",
+				NeverTypeOfError.class, 1);
+		setErrorsCount("<issue81.Encryption: javax.crypto.SecretKey generateKey(java.lang.String)>",
+				ConstraintError.class, 1);
+
+		setErrorsCount("<issue81.Main: void main(java.lang.String[])>", IncompleteOperationError.class, 1);
+		setErrorsCount("<issue81.Main: void main(java.lang.String[])>", NeverTypeOfError.class, 1);
+
+		setErrorsCount("<issueCogniCrypt210.CogniCryptSecretKeySpec: void main(java.lang.String[])>",
+				ConstraintError.class, 0);
+		setErrorsCount("<issueCogniCrypt210.CogniCryptSecretKeySpec: void main(java.lang.String[])>",
+				RequiredPredicateError.class, 0);
+
+		setErrorsCount("<issue70.ClientProtocolDecoder: byte[] decryptAES(byte[])>", ConstraintError.class, 1);
+		setErrorsCount("<issue70.ClientProtocolDecoder: byte[] decryptAES(byte[])>", RequiredPredicateError.class, 3);
+
+		setErrorsCount("<issue68.Main: void main(java.lang.String[])>", IncompleteOperationError.class, 2);
+
+		setErrorsCount("<issue68.AESCryptor: byte[] getKey(java.lang.String)>", NeverTypeOfError.class, 1);
+		setErrorsCount("<issue68.AESCryptor: byte[] getKey(java.lang.String)>", RequiredPredicateError.class, 2);
+		setErrorsCount("<issue68.AESCryptor: byte[] getKey(java.lang.String)>", IncompleteOperationError.class, 1);
+		setErrorsCount("<issue68.AESCryptor: javax.crypto.SecretKeyFactory getFactory()>", ConstraintError.class, 1);
+		setErrorsCount("<issue68.AESCryptor: byte[] encryptImpl(byte[])>", RequiredPredicateError.class, 1);
+
+		setErrorsCount("<issue68.AESCryptor: void <init>(byte[])>", RequiredPredicateError.class, 1);
+		setErrorsCount("<issue68.AESCryptor: byte[] decryptImpl(byte[])>", RequiredPredicateError.class, 2);
+
+		setErrorsCount("<issue49.Main: java.security.PrivateKey getPrivateKey()>", ConstraintError.class, 1);
+		setErrorsCount("<issue49.Main: byte[] sign(java.lang.String)>", RequiredPredicateError.class, 1);
+
+		scanner.exec();
+		assertErrors();
 	}
-	
+
 	@Test
 	public void oracleExample() {
 		String sootClassPath = new File("../CryptoAnalysisTargets/OracleExample/bin").getAbsolutePath();
 		HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
-//
+		//
 		setErrorsCount("<main.Main: void main(java.lang.String[])>", ConstraintError.class, 1);
 		setErrorsCount("<main.Main: void main(java.lang.String[])>", TypestateError.class, 1);
 		setErrorsCount("<main.Main: void main(java.lang.String[])>", RequiredPredicateError.class, 1);
@@ -157,10 +163,11 @@ public class HeadlessTests {
 
 		setErrorsCount("<main.Main: void use(javax.crypto.Cipher)>", TypestateError.class, 1);
 
+		setErrorsCount("<main.Main: void use(javax.crypto.Cipher)>", TypestateError.class, 1);
 
-		//TODO this is a spurious finding. What happens here?
-		setErrorsCount("<Crypto.PWHasher: java.lang.Boolean verifyPWHash(char[],java.lang.String)>", RequiredPredicateError.class, 2);
-
+		// TODO this is a spurious finding. What happens here?
+		setErrorsCount("<Crypto.PWHasher: java.lang.Boolean verifyPWHash(char[],java.lang.String)>",
+				RequiredPredicateError.class, 2);
 
 		setErrorsCount("<main.Main: void incorrectKeyForWrongCipher()>", ConstraintError.class, 1);
 		setErrorsCount("<main.Main: void incorrectKeyForWrongCipher()>", RequiredPredicateError.class, 1);
@@ -184,7 +191,8 @@ public class HeadlessTests {
 				+ new File("../CryptoAnalysisTargets/StopwatchExample/guava-23.0.jar").getAbsolutePath();
 		String rulesDir = new File("../CryptoAnalysisTargets/StopwatchExample/rules").getAbsolutePath();
 		HeadlessCryptoScanner scanner = createAnalysisFor(applicationClassPath, sootClassPath, rulesDir);
-		//TODO this is wrong. The state machine does not label the correct accepting states for the state machine.
+		// TODO this is wrong. The state machine does not label the correct accepting
+		// states for the state machine.
 		setErrorsCount("<main.Main: void correct()>", IncompleteOperationError.class, 2);
 		setErrorsCount("<main.Main: void wrong()>", TypestateError.class, 1);
 		setErrorsCount("<main.Main: void context(com.google.common.base.Stopwatch)>", TypestateError.class, 1);
@@ -198,7 +206,6 @@ public class HeadlessTests {
 	public void cryptoMisuseExampleProject() {
 		String sootClassPath = new File("../CryptoAnalysisTargets/CryptoMisuseExamples/bin").getAbsolutePath();
 		HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
-
 
 		setErrorsCount("<main.Msg: byte[] sign(java.lang.String)>", ConstraintError.class, 1);
 		setErrorsCount("<main.Msg: byte[] sign(java.lang.String)>", RequiredPredicateError.class, 1);
@@ -214,32 +221,42 @@ public class HeadlessTests {
 
 	@Test
 	public void stopwatchPathExpressionExample() {
-		String applicationClassPath = new File("../CryptoAnalysisTargets/StopwatchPathExpression/bin").getAbsolutePath();
+		String applicationClassPath = new File("../CryptoAnalysisTargets/StopwatchPathExpression/bin")
+				.getAbsolutePath();
 		String sootClassPath = applicationClassPath + File.pathSeparator
 				+ new File("../CryptoAnalysisTargets/StopwatchPathExpression/lib/guava-23.0.jar").getAbsolutePath();
 		String rulesDir = new File("../CryptoAnalysisTargets/StopwatchPathExpression/rules").getAbsolutePath();
 		HeadlessCryptoScanner scanner = createAnalysisFor(applicationClassPath, sootClassPath, rulesDir);
-		setErrorsCount("<pathexpression.PathExpressionComputer: pathexpression.IRegEx getExpressionBetween(java.lang.Object,java.lang.Object)>", TypestateError.class, 1);
-		setErrorsCount("<pathexpression.DepthFirstSearchMain: void dfsFrom(test.IntGraph,int,java.util.Set,com.google.common.base.Stopwatch)>", TypestateError.class, 1);
+		setErrorsCount(
+				"<pathexpression.PathExpressionComputer: pathexpression.IRegEx getExpressionBetween(java.lang.Object,java.lang.Object)>",
+				TypestateError.class, 1);
+		setErrorsCount(
+				"<pathexpression.DepthFirstSearchMain: void dfsFrom(test.IntGraph,int,java.util.Set,com.google.common.base.Stopwatch)>",
+				TypestateError.class, 1);
 
-		//TODO this is wrong. The state machine does not label the correct accepting states for the state machine.
+		// TODO this is wrong. The state machine does not label the correct accepting
+		// states for the state machine.
 		setErrorsCount("<pathexpression.Main: void main(java.lang.String[])>", IncompleteOperationError.class, 1);
 		scanner.exec();
 		assertErrors();
 
 	}
 
-
 	@Test
 	public void glassfishExample() {
 		String sootClassPath = new File("../CryptoAnalysisTargets/glassfish-embedded/bin").getAbsolutePath();
 		HeadlessCryptoScanner scanner = createAnalysisFor(sootClassPath, sootClassPath);
-		
-		
-		setErrorsCount("<org.glassfish.grizzly.config.ssl.CustomClass: void init(javax.crypto.SecretKey,java.lang.String)>", RequiredPredicateError.class, 1);
-		
-		setErrorsCount("<org.glassfish.grizzly.config.ssl.CustomClass: void init(javax.crypto.SecretKey,java.lang.String)>", ConstraintError.class, 1);
-		setErrorsCount("<org.glassfish.grizzly.config.ssl.JSSESocketFactory: java.security.KeyStore getStore(java.lang.String,java.lang.String,java.lang.String)>", NeverTypeOfError.class, 1);
+
+		setErrorsCount(
+				"<org.glassfish.grizzly.config.ssl.CustomClass: void init(javax.crypto.SecretKey,java.lang.String)>",
+				RequiredPredicateError.class, 1);
+
+		setErrorsCount(
+				"<org.glassfish.grizzly.config.ssl.CustomClass: void init(javax.crypto.SecretKey,java.lang.String)>",
+				ConstraintError.class, 1);
+		setErrorsCount(
+				"<org.glassfish.grizzly.config.ssl.JSSESocketFactory: java.security.KeyStore getStore(java.lang.String,java.lang.String,java.lang.String)>",
+				NeverTypeOfError.class, 1);
 
 		scanner.exec();
 		assertErrors();
@@ -253,6 +270,7 @@ public class HeadlessTests {
 	private HeadlessCryptoScanner createAnalysisFor(String applicationClassPath, String sootClassPath,
 			String rulesDir) {
 		HeadlessCryptoScanner scanner = new HeadlessCryptoScanner() {
+
 			@Override
 			protected String getRulesDirectory() {
 				return rulesDir;
@@ -272,6 +290,7 @@ public class HeadlessTests {
 			protected CrySLAnalysisListener getAdditionalListener() {
 				return errorCountingAnalysisListener;
 			}
+
 			@Override
 			protected String getOutputFolder() {
 				File file = new File("cognicrypt-output/");
@@ -283,6 +302,7 @@ public class HeadlessTests {
 			protected boolean enableVisualization() {
 				return VISUALIZATION;
 			}
+
 		};
 		return scanner;
 	}
@@ -290,16 +310,20 @@ public class HeadlessTests {
 	@Before
 	public void setup() {
 		errorCountingAnalysisListener = new CrySLAnalysisListener() {
+
 			@Override
 			public void reportError(AbstractError error) {
 				Integer currCount;
-				if(!errorMarkerCountPerErrorTypeAndMethod
-						.contains(error.getErrorLocation().getMethod().toString(), error.getClass())) {
+
+				if (!errorMarkerCountPerErrorTypeAndMethod.contains(error.getErrorLocation().getMethod().toString(),
+						error.getClass())) {
+
 					currCount = 0;
 				} else {
 					currCount = errorMarkerCountPerErrorTypeAndMethod
 							.get(error.getErrorLocation().getMethod().toString(), error.getClass());
 				}
+
 				Integer newCount = --currCount;
 				errorMarkerCountPerErrorTypeAndMethod.put(error.getErrorLocation().getMethod().toString(),
 						error.getClass(), newCount);
@@ -370,6 +394,12 @@ public class HeadlessTests {
 
 			@Override
 			public void afterAnalysis() {
+			}
+
+			@Override
+			public void onSecureObjectFound(IAnalysisSeed analysisObject) {
+				// TODO Auto-generated method stub
+
 			}
 		};
 	}
