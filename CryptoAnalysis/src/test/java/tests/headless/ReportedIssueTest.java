@@ -55,6 +55,8 @@ public class ReportedIssueTest extends AbstractHeadlessTest {
 	  	setErrorsCount("<issue49.Main: java.security.PrivateKey getPrivateKey()>", ConstraintError.class,1);
 	  	setErrorsCount("<issue49.Main: byte[] sign(java.lang.String)>", RequiredPredicateError.class,1);
 	  
+		//setErrorsCount("<issue53.DataFlowImprecisionExample: void cipherUsageExampleUsingFieldWithStringConstant()>", ConstraintError.class, 1);
+		setErrorsCount("<issue53.DataFlowImprecisionExample: void cipherUsageExampleUsingStringConstantAsVariableInKeyGenerator()>", ConstraintError.class, 1);
 	  	scanner.exec();
 	  	assertErrors();
 	}
