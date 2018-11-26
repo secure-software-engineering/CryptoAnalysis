@@ -3,18 +3,23 @@ package crypto.analysis;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.Set;
 
 import boomerang.WeightedForwardQuery;
 import boomerang.jimple.Statement;
 import boomerang.jimple.Val;
+import boomerang.results.ForwardBoomerangResults;
 import crypto.predicates.PredicateHandler;
 import soot.SootMethod;
+import sync.pds.solver.nodes.Node;
 import typestate.TransitionFunction;
 
 public abstract class IAnalysisSeed extends WeightedForwardQuery<TransitionFunction> {
 
 	protected final CryptoScanner cryptoScanner;
 	protected final PredicateHandler predicateHandler;
+	protected ForwardBoomerangResults<TransitionFunction> results;
 	private String objectId;
 
 	public IAnalysisSeed(CryptoScanner scanner, Statement stmt, Val fact, TransitionFunction func){
@@ -40,7 +45,13 @@ public abstract class IAnalysisSeed extends WeightedForwardQuery<TransitionFunct
 			this.objectId = new BigInteger(1, md.digest(this.toString().getBytes())).toString(16);
 		}
 		return this.objectId;
-		
 	}
 	
+	
+	public Set<Node<Statement,Val>> getDataFlowPath(){
+		if(results == null) {
+			return Collections.emptySet();
+		}
+		return results.getDataFlowPath();
+	}
 }

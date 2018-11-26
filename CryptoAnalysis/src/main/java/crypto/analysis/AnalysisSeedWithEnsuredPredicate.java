@@ -24,7 +24,7 @@ import typestate.TransitionFunction;
 
 public class AnalysisSeedWithEnsuredPredicate extends IAnalysisSeed{
 
-	private ForwardBoomerangResults<TransitionFunction> analysisResults;
+	private ForwardBoomerangResults<TransitionFunction> results;
 	private Set<EnsuredCryptSLPredicate> ensuredPredicates = Sets.newHashSet();
 	private ExtendedIDEALAnaylsis problem;
 	private boolean analyzed;
@@ -38,18 +38,18 @@ public class AnalysisSeedWithEnsuredPredicate extends IAnalysisSeed{
 		cryptoScanner.getAnalysisListener().seedStarted(this);
 		ExtendedIDEALAnaylsis solver = getOrCreateAnalysis();
 		solver.run(this);
-		analysisResults = solver.getResults();
+		results = solver.getResults();
 		for(EnsuredCryptSLPredicate pred : ensuredPredicates)
 			ensurePredicates(pred);
-		cryptoScanner.getAnalysisListener().onSeedFinished(this, analysisResults);
+		cryptoScanner.getAnalysisListener().onSeedFinished(this, results);
 		analyzed = true;
 	}
 
 	protected void ensurePredicates(EnsuredCryptSLPredicate pred) {
-		if(analysisResults == null)
+		if(results == null)
 			return;
 
-		for(Cell<Statement, Val, TransitionFunction> c : analysisResults.asStatementValWeightTable().cellSet()){
+		for(Cell<Statement, Val, TransitionFunction> c : results.asStatementValWeightTable().cellSet()){
 			predicateHandler.addNewPred(this,c.getRowKey(), c.getColumnKey(), pred);
 		}
 	}
@@ -101,4 +101,5 @@ public class AnalysisSeedWithEnsuredPredicate extends IAnalysisSeed{
 	public String toString() {
 		return "AnalysisSeedWithEnsuredPredicate:"+this.asNode() +" " + ensuredPredicates; 
 	}
+	
 }
