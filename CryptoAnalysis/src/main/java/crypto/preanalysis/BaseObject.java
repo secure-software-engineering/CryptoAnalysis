@@ -58,7 +58,8 @@ public class BaseObject {
     }
 
     @XmlElement
-    public List<BaseObject> getMapOfParametersForXML() {
+    @XmlIDREF
+    public List<BaseObject> getMapOfParametersForXMLBaseObject() {
 
         List<BaseObject> combinedList = new ArrayList<>();
         for (String s : mapOfParameters.keySet()) {
@@ -87,7 +88,7 @@ public class BaseObject {
     }
     @XmlElement
     public String getAllocationSiteString(){
-        return allocationSite.toString();
+        return allocationSite.toString().replace("<","").replace(">","");
     }
 
     public SootClass getSootClass() {
@@ -97,9 +98,11 @@ public class BaseObject {
     public String getSootClassString(){
         return sootClass.toString();
     }
+    // Using ID to create a reference to the sub base objects.
     @XmlAttribute
-    public int getId() {
-        return id;
+    @XmlID
+    public String getId() {
+        return Integer.toString(id); //XML ID attribute requires the value to be string.
     }
     @XmlAttribute
     public String getRuleName() {
