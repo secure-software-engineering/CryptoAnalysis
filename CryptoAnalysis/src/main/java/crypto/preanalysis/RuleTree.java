@@ -77,10 +77,13 @@ public final class RuleTree {
                 parent.getChildren().remove(rootNode);
 
                 // check the former siblings of the exchanged sub class, if they are sub classes to the new super class, add them as children.
-                for (TreeNode<TreeNodeData> child : parent.getChildren()) {
+                ListIterator<TreeNode<TreeNodeData>> treeNodeListIterator = parent.getChildren().listIterator();
+                while (treeNodeListIterator.hasNext()) {
+                    TreeNode<TreeNodeData> child = treeNodeListIterator.next();
+                    System.out.println("child: " + child.getData().getClassSpecification().toString() + "  parent: " + parent.getData().getClassSpecification().toString());
                     if (child.getData().getSootClass() != nodeUnderConsideration.getData().getSootClass()) {
                         if (Scene.v().getOrMakeFastHierarchy().isSubclass(child.getData().getSootClass(), nodeUnderConsideration.getData().getSootClass())) {
-                            parent.getChildren().remove(child);
+                            treeNodeListIterator.remove();
                             insertNode(child, nodeUnderConsideration);
                         }
                     }
