@@ -1,0 +1,49 @@
+SPEC android.content.Context
+OBJECTS
+android.content.Intent intent;
+android.os.Bundle options;
+
+android.content.Intent[] intents;
+
+android.content.IntentSender intentSender;
+android.content.Intent fillInIntent;
+int flagsMask;
+int flagsValues;
+int extraFlags;
+
+android.content.Intent service;
+
+android.content.ServiceConnection  conn;
+
+android.content.ComponentCallbacks  callback;
+android.content.BroadcastReceiver receiver;
+EVENTS
+
+public_constructor : Context();
+
+sas1: startActivities(intents);
+sas2: startActivities(intents, options);
+startActivities := sas1 | sas2; 
+
+
+
+sa1: startActivity( intent);
+sa2: startActivity(intent, options);
+startActivity := sa1 | sa2 ;
+
+sis1: startIntentSender(intentSender, fillInIntent, flagsMask, flagsValues, extraFlags);
+sis2: startIntentSender(intentSender, fillInIntent, flagsMask, flagsValues, extraFlags, options);
+startIntentSender := sis1 | sis2;
+
+
+startService: startService(service);
+stopService: stopService(service);
+
+unbindService: unbindService(conn);
+
+unregisterComponentCallbacks: unregisterComponentCallbacks(callback);
+unregisterReceiver: unregisterReceiver(receiver);
+
+ORDER
+
+public_constructor | startActivities | startIntentSender | startService | stopService | unbindService | unregisterComponentCallbacks | unregisterReceiver

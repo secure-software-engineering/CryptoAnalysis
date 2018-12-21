@@ -8,9 +8,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import org.junit.Test;
 import test.UIExtractionFrameworkBasedOnUPTF;
+import test.UsagePatternTestingFramework;
 import test.assertions.Assertions;
 
-public class ButtonTests extends UIExtractionFrameworkBasedOnUPTF {
+public class ButtonTests extends UsagePatternTestingFramework {
 
     @Test
     public void buttonTest(){

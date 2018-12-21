@@ -1,0 +1,45 @@
+SPEC android.view.Menu 
+OBJECTS
+int groupId;
+int itemId;
+int order;
+java.lang.CharSequence title;
+int titleRes;
+
+android.content.ComponentName caller;
+android.content.Intent[] specifics;
+android.content.Intent intent;
+int flags;
+android.view.MenuItem [] outSpecificItems;
+
+int id;
+int group;
+boolean checkable;
+boolean exclusive;
+boolean groupDividerEnabled;
+boolean enabled;
+boolean visible;
+EVENTS
+ a1: add(groupId, itemId, order, title);
+ a2: add(titleRes);
+ a3: add(title);
+ a4: add(groupId, itemId, order, titleRes);
+ add_stuff := a1 | a2 | a3 | a4;
+ 
+add_intent_options: addIntentOptions(groupId, itemId, order, caller, specifics, intent, flags, outSpecificItems);
+
+asm1: addSubMenu(title);
+asm2: addSubMenu(groupId, itemId, order, titleRes);
+asm3: addSubMenu(groupId, itemId, order, title);
+asm4: addSubMenu(titleRes);
+add_sub_menu := asm1 | asm2 | asm3 | asm4;
+
+remove_group: removeGroup(groupId);
+remove_item: removeItem(id);
+set_group_checkable: setGroupCheckable(group, checkable, exclusive);
+//set_group_divider_enabled: setGroupDividerEnabled(groupDividerEnabled);
+set_group_enabled: setGroupEnabled(group, enabled); 
+set_group_visible: setGroupVisible(group, visible); 
+ 	 	 	
+ORDER
+add_stuff | add_intent_options | add_sub_menu | remove_group | remove_item | set_group_checkable | set_group_enabled | set_group_visible
