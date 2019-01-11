@@ -1,4 +1,4 @@
-package crypto.preanalysis;
+package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 
 import java.util.ArrayList;
 import java.util.List;

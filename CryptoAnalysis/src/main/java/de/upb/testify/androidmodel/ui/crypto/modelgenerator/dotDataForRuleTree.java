@@ -1,7 +1,4 @@
-package crypto.preanalysis;
-
-import crypto.preanalysis.TreeNode;
-import crypto.preanalysis.TreeNodeData;
+package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 
 import java.util.AbstractMap;
 import java.util.HashMap;

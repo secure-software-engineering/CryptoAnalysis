@@ -1,24 +1,27 @@
 package crypto.typestate;
 
+import de.upb.testify.androidmodel.ui.crypto.modelgenerator.RuleTree;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.google.common.collect.Sets;
+import soot.RefType;
+import soot.SootClass;
+import soot.SootMethod;
+import soot.Type;
+import soot.Unit;
+import soot.jimple.AssignStmt;
+import soot.jimple.InstanceInvokeExpr;
+import soot.jimple.InvokeExpr;
+import soot.jimple.NewExpr;
+import soot.jimple.Stmt;
 
 import boomerang.WeightedForwardQuery;
 import boomerang.jimple.AllocVal;
 import boomerang.jimple.Statement;
 import crypto.analysis.ClassSpecification;
 import crypto.analysis.CryptoScanner;
-import crypto.preanalysis.RuleTree;
-import soot.*;
-import crypto.rules.CryptSLMethod;
-import soot.jimple.AssignStmt;
-import soot.jimple.InstanceInvokeExpr;
-import soot.jimple.InvokeExpr;
-import soot.jimple.NewExpr;
-import soot.jimple.Stmt;
 import typestate.TransitionFunction;
 import typestate.finiteautomata.MatcherTransition;
 import typestate.finiteautomata.State;

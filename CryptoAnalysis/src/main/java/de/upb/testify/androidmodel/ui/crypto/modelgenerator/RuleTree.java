@@ -1,11 +1,17 @@
-package crypto.preanalysis;
+package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 
-import crypto.Utils;
-import crypto.analysis.ClassSpecification;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+
 import soot.Scene;
 import soot.SootClass;
 
-import java.util.*;
+import crypto.Utils;
+import crypto.analysis.ClassSpecification;
 
 public final class RuleTree {
 

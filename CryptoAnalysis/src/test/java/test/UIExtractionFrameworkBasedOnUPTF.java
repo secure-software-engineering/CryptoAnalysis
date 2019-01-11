@@ -1,15 +1,21 @@
 package test;
 
+import de.upb.testify.androidmodel.ui.crypto.modelgenerator.AllocationSitesWithUIDs;
+
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import soot.SceneTransformer;
+import soot.jimple.internal.JAssignStmt;
+
 import crypto.analysis.AnalysisSeedWithSpecification;
 import crypto.analysis.IAnalysisSeed;
 import crypto.extractparameter.CallSiteWithParamIndex;
 import crypto.extractparameter.ExtractedValue;
-import crypto.preanalysis.AllocationSitesWithUIDs;
-import soot.SceneTransformer;
-import soot.jimple.internal.JAssignStmt;
 import test.core.selfrunning.ImprecisionException;
-
-import java.util.*;
 
 public class UIExtractionFrameworkBasedOnUPTF extends UsagePatternTestingFramework {
 

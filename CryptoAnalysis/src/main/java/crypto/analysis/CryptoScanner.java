@@ -1,37 +1,35 @@
 package crypto.analysis;
 
-import java.io.StringWriter;
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import de.upb.testify.androidmodel.ui.crypto.modelgenerator.ObjectModel;
+import de.upb.testify.androidmodel.ui.crypto.modelgenerator.RuleTree;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+
+import heros.utilities.DefaultValueMap;
+
+import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import javax.xml.bind.JAXBException;
+
+import soot.SootMethod;
+import soot.Unit;
+import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
 
 import boomerang.Query;
 import boomerang.debugger.Debugger;
 import boomerang.jimple.Statement;
 import boomerang.jimple.Val;
-import crypto.Utils;
-import crypto.extractparameter.CallSiteWithParamIndex;
-import crypto.extractparameter.ExtractedValue;
-import crypto.preanalysis.*;
 import crypto.predicates.PredicateHandler;
 import crypto.rules.CryptSLRule;
 import crypto.typestate.CryptSLMethodToSootMethod;
-import heros.utilities.DefaultValueMap;
 import ideal.IDEALSeedSolver;
-import soot.Scene;
-import soot.SootClass;
-import soot.SootMethod;
-import soot.Unit;
-import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
 import sync.pds.solver.nodes.Node;
 import typestate.TransitionFunction;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 public abstract class CryptoScanner {
 
@@ -40,9 +38,6 @@ public abstract class CryptoScanner {
 	private final List<ClassSpecification> specifications = Lists.newLinkedList();
 	private final PredicateHandler predicateHandler = new PredicateHandler(this);
 	private CrySLResultsReporter resultsAggregator = new CrySLResultsReporter();
-	private Map<IAnalysisSeed, BaseObject> mapOfBaseObjects;
-	private int counterForIDs;
-    private List<IAnalysisSeed> listOfAnalysisSeeds;
 
 	private DefaultValueMap<Node<Statement, Val>, AnalysisSeedWithEnsuredPredicate> seedsWithoutSpec = new DefaultValueMap<Node<Statement, Val>, AnalysisSeedWithEnsuredPredicate>() {
 
@@ -65,9 +60,9 @@ public abstract class CryptoScanner {
 
 	public CrySLResultsReporter getAnalysisListener() {
 		return resultsAggregator;
-	};
+  }
 
-	public abstract boolean isCommandLineMode();
+  public abstract boolean isCommandLineMode();
 
 	public abstract boolean rulesInSrcFormat();
 
@@ -87,26 +82,23 @@ public abstract class CryptoScanner {
 		System.out.println("Discovered " + worklist.size() + " analysis seeds within " + elapsed + " seconds!");
 
 		//List<AllocationSitesWithUIDs> dataForUIClassHeirarchy = new ArrayList<>();
-		listOfAnalysisSeeds = new ArrayList<>();
 		while (!worklist.isEmpty()) {
 			IAnalysisSeed curr = worklist.poll();
-            listOfAnalysisSeeds.add(curr);
 			getAnalysisListener().discoveredSeed(curr);
 			curr.execute();
 			estimateAnalysisTime();
 		}
 
-        mapOfBaseObjects = new HashMap<>();
-		counterForIDs = 0;
-
-        for (IAnalysisSeed analysisSeed : listOfAnalysisSeeds) {
-            BaseObject baseObjectForSeed = baseObjectForSeed(analysisSeed);
-			//counterForIDs = counterForIDs + 1;
-            //mapOfBaseObjects.put(analysisSeed, new BaseObject(analysisSeed.stmt(), counterForIDs, ""));
-
+    ObjectModel objectModel = new ObjectModel();
+    objectModel.addObjectsBySeed(getAnalysisSeeds());
+    try {
+      objectModel.toXml(System.out);
+    } catch (JAXBException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
         }
-        
-		
+
         /*List<AllocationSitesWithUIDs> dataUIClassHierarchy = getHierarchyRelationshipData(listOfAnalysisSeeds);
 
 		for (AllocationSitesWithUIDs allocationSitesWithUIDs : dataUIClassHierarchy) {
@@ -120,27 +112,10 @@ public abstract class CryptoScanner {
 //			ideVizDebugger.addEnsuredPredicates(this.existingPredicates);
 //		}
 
-        BaseObjects baseObjects = new BaseObjects();
-        baseObjects.setBaseObjects(new ArrayList<>());
-        for (BaseObject value : mapOfBaseObjects.values()) {
-            baseObjects.getBaseObjects().add(value);
-        }
 
 
         //baseObjects.setBaseObjects((List)mapOfBaseObjects.values());
 
-        StringWriter forString = new StringWriter();
-        try {
-            JAXBContext context = JAXBContext.newInstance(BaseObjects.class);
-            Marshaller marshaller = context.createMarshaller();
-            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(baseObjects, forString);
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
-
-
-        System.out.println(forString.toString());
 
        /* for (Object o : mapOfBaseObjects.keySet().toArray()) {
             System.out.println(mapOfBaseObjects.get(o).returnXMLNode());
@@ -158,47 +133,6 @@ public abstract class CryptoScanner {
 
 
 
-    // should the param here be alloc site?
-	private BaseObject baseObjectForSeed(IAnalysisSeed analysisSeedParam){
-        if(mapOfBaseObjects.containsKey(analysisSeedParam)){
-            return mapOfBaseObjects.get(analysisSeedParam);
-        } else{
-            // unique ids for each new base object.
-            counterForIDs = counterForIDs + 1;
-
-            CryptSLRule ruleFromAnalysisSeedParam = ((AnalysisSeedWithSpecification) analysisSeedParam).getSpec().getRule();
-            SootClass sootClassVarForAnalysisSeedParam = Scene.v().forceResolve(Utils.getFullyQualifiedName(ruleFromAnalysisSeedParam), SootClass.HIERARCHY);
-            // The first parameter is the allocation site, 2nd is the unique id, and the third is the rule name.
-            BaseObject tmpBaseObject = new BaseObject(analysisSeedParam.stmt(), counterForIDs, ruleFromAnalysisSeedParam.getClassName(), sootClassVarForAnalysisSeedParam, analysisSeedParam.stmt().getMethod().toString().replace("<","").replace(">",""));
-            //BaseObject tmpBaseObject = new BaseObject(analysisSeedParam.stmt(), counterForIDs, analysisSeedParam.toString());
-			mapOfBaseObjects.put(analysisSeedParam, tmpBaseObject);
-            // go through the parameters
-            if (analysisSeedParam instanceof AnalysisSeedWithSpecification){
-                for (Map.Entry<CallSiteWithParamIndex, ExtractedValue> entry : ((AnalysisSeedWithSpecification) analysisSeedParam).getParameterAnalysis().getCollectedValues().entries()) {
-                    for (IAnalysisSeed analysisSeed : listOfAnalysisSeeds) {
-                        if (analysisSeed.stmt().equals(entry.getValue().stmt())){
-                            /*if (mapOfBaseObjects.containsKey(analysisSeed)){
-
-                            }*/
-                            // Change the first parameter to the name of the type of parameter.
-                            mapOfBaseObjects.get(analysisSeedParam).getMapOfParameters().put(analysisSeed.toString(),baseObjectForSeed(analysisSeed));
-                            //tmpBaseObject.getMapOfParameters().put(analysisSeed.toString(),baseObjectForSeed(analysisSeed));
-                        }
-                    }
-
-
-                    
-
-                }
-            }
-
-
-            // call baseObjectForSeed for each parameter pass alloc site
-            // add base object to the map
-
-        }
-        return null;
-    }
 	/*private void writeDotFile(List<AllocationSitesWithUIDs> dataUIClassHierarchy){
 
         Map<String, String> nodes = new HashMap<>();

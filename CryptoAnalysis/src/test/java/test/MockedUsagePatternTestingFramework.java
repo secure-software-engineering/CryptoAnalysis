@@ -1,7 +1,14 @@
 package test;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.google.common.collect.Lists;
-import crypto.rules.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import soot.Body;
 import soot.SootMethod;
 import soot.Unit;
@@ -9,22 +16,21 @@ import soot.Value;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.StringConstant;
+
+import crypto.rules.CryptSLMethod;
+import crypto.rules.CryptSLRule;
+import crypto.rules.StateMachineGraph;
+import crypto.rules.StateNode;
+import crypto.rules.TransitionEdge;
 import test.assertions.Assertions;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class MockedUsagePatternTestingFramework extends UsagePatternTestingFramework {
     private String[] classesToMock;
     @Override
-    protected List<CryptSLRule> getRules(){
+  protected List<CryptSLRule> getRules(boolean srcFormat) {
 
         if (getClassesToMock() == null){
-            return super.getRules();
+      return super.getRules(srcFormat);
         }
         List<CryptSLRule> listOfMockedRules = Lists.newArrayList();
 

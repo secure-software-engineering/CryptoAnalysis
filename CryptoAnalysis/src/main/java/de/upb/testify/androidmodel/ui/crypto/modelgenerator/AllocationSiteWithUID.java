@@ -1,4 +1,4 @@
-package crypto.preanalysis;
+package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 
 import boomerang.jimple.Statement;
 

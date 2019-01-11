@@ -1,7 +1,8 @@
-package crypto.preanalysis;
+package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
+
+import soot.SootClass;
 
 import crypto.analysis.ClassSpecification;
-import soot.SootClass;
 
 public class TreeNodeData {
     private SootClass sootClass;
