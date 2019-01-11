@@ -44,12 +44,10 @@ public abstract class CryptoScanner {
 	private int counterForIDs;
     private List<IAnalysisSeed> listOfAnalysisSeeds;
 
-	
-
-	private DefaultValueMap<Node<Statement,Val>, AnalysisSeedWithEnsuredPredicate> seedsWithoutSpec = new DefaultValueMap<Node<Statement,Val>, AnalysisSeedWithEnsuredPredicate>() {
+	private DefaultValueMap<Node<Statement, Val>, AnalysisSeedWithEnsuredPredicate> seedsWithoutSpec = new DefaultValueMap<Node<Statement, Val>, AnalysisSeedWithEnsuredPredicate>() {
 
 		@Override
-		protected AnalysisSeedWithEnsuredPredicate createItem(Node<Statement,Val> key) {
+		protected AnalysisSeedWithEnsuredPredicate createItem(Node<Statement, Val> key) {
 			return new AnalysisSeedWithEnsuredPredicate(CryptoScanner.this, key);
 		}
 	};
@@ -57,7 +55,7 @@ public abstract class CryptoScanner {
 
 		@Override
 		protected AnalysisSeedWithSpecification createItem(AnalysisSeedWithSpecification key) {
-			return new AnalysisSeedWithSpecification(CryptoScanner.this, key.stmt(),key.var(), key.getSpec());
+			return new AnalysisSeedWithSpecification(CryptoScanner.this, key.stmt(), key.var(), key.getSpec());
 		}
 	};
 	private int solvedObject;
@@ -71,23 +69,22 @@ public abstract class CryptoScanner {
 
 	public abstract boolean isCommandLineMode();
 
+	public abstract boolean rulesInSrcFormat();
 
-	public CryptoScanner(List<CryptSLRule> specs) {
+	public CryptoScanner() {
 		CryptSLMethodToSootMethod.reset();
+	}
+
+	public void scan(List<CryptSLRule> specs) {
+
 		for (CryptSLRule rule : specs) {
 			specifications.add(new ClassSpecification(rule, this));
 		}
-	}
-
-	
-
-
-	public void scan() {
 		getAnalysisListener().beforeAnalysis();
 		analysisWatch = Stopwatch.createStarted();
 		initialize();
 		long elapsed = analysisWatch.elapsed(TimeUnit.SECONDS);
-		System.out.println("Discovered "+worklist.size() + " analysis seeds within " + elapsed + " seconds!");
+		System.out.println("Discovered " + worklist.size() + " analysis seeds within " + elapsed + " seconds!");
 
 		//List<AllocationSitesWithUIDs> dataForUIClassHeirarchy = new ArrayList<>();
 		listOfAnalysisSeeds = new ArrayList<>();
@@ -152,10 +149,10 @@ public abstract class CryptoScanner {
 
         //System.out.println(mapOfBaseObjects.get(mapOfBaseObjects.keySet().toArray()[0]).returnXMLNode());
 		predicateHandler.checkPredicates();
-		
+
 		getAnalysisListener().afterAnalysis();
 		elapsed = analysisWatch.elapsed(TimeUnit.SECONDS);
-		System.out.println("Static Analysis took "+elapsed+ " seconds!");
+		System.out.println("Static Analysis took " + elapsed + " seconds!");
 //		debugger().afterAnalysis();
 	}
 
@@ -311,14 +308,15 @@ public abstract class CryptoScanner {
 	private void estimateAnalysisTime() {
 		int remaining = worklist.size();
 		solvedObject++;
-		if(remaining != 0) {
-			Duration elapsed = analysisWatch.elapsed();
-			Duration estimate = elapsed.dividedBy(solvedObject);
-			Duration remainingTime = estimate.multipliedBy(remaining);
-			System.out.println(String.format("Analysis Time: %s", elapsed));
-			System.out.println(String.format("Estimated Time: %s", remainingTime));
+		if (remaining != 0) {
+//			Duration elapsed = analysisWatch.elapsed();
+//			Duration estimate = elapsed.dividedBy(solvedObject);
+//			Duration remainingTime = estimate.multipliedBy(remaining);
+//			System.out.println(String.format("Analysis Time: %s", elapsed));
+//			System.out.println(String.format("Estimated Time: %s", remainingTime));
 			System.out.println(String.format("Analyzed Objects: %s of %s", solvedObject, remaining + solvedObject));
-			System.out.println(String.format("Percentage Completed: %s\n", ((float)Math.round((float)solvedObject*100 / (remaining + solvedObject)))/100));
+			System.out.println(String.format("Percentage Completed: %s\n",
+					((float) Math.round((float) solvedObject * 100 / (remaining + solvedObject))) / 100));
 		}
 	}
 
@@ -331,8 +329,8 @@ public abstract class CryptoScanner {
 				continue;
 
 			for (Query seed : spec.getInitialSeeds()) {
-				if(!spec.getRule().getClassName().equals("javax.crypto.SecretKey")) {
-					getOrCreateSeedWithSpec(new AnalysisSeedWithSpecification(this, seed.stmt(),seed.var(),spec));
+				if (!spec.getRule().getClassName().equals("javax.crypto.SecretKey")) {
+					getOrCreateSeedWithSpec(new AnalysisSeedWithSpecification(this, seed.stmt(), seed.var(), spec));
 				}
 			}
 		}
@@ -367,9 +365,8 @@ public abstract class CryptoScanner {
 		return seed;
 	}
 
-
-	
-	public Debugger<TransitionFunction> debugger(IDEALSeedSolver<TransitionFunction> solver, IAnalysisSeed analyzedObject) {
+	public Debugger<TransitionFunction> debugger(IDEALSeedSolver<TransitionFunction> solver,
+			IAnalysisSeed analyzedObject) {
 		return new Debugger<>();
 	}
 

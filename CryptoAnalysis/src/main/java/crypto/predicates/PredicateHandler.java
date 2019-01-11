@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.beust.jcommander.internal.Sets;
 import com.google.common.base.Optional;
 import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
@@ -31,7 +31,6 @@ import crypto.analysis.errors.RequiredPredicateError;
 import crypto.boomerang.CogniCryptBoomerangOptions;
 import crypto.extractparameter.CallSiteWithExtractedValue;
 import crypto.extractparameter.CallSiteWithParamIndex;
-import crypto.extractparameter.ExtractedValue;
 import crypto.interfaces.ISLConstraint;
 import crypto.rules.CryptSLPredicate;
 import crypto.rules.CryptSLRule;
@@ -43,8 +42,6 @@ import soot.jimple.InstanceInvokeExpr;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
 import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
-import sync.pds.solver.nodes.INode;
-import wpds.impl.PAutomaton;
 import wpds.impl.Weight.NoWeight;
 
 public class PredicateHandler {
@@ -58,12 +55,12 @@ public class PredicateHandler {
 		this.cryptoScanner = cryptoScanner;
 	}
 
-	public boolean addNewPred(IAnalysisSeed seedObj, Statement statement, Val seed, EnsuredCryptSLPredicate ensPred) {
-		Set<EnsuredCryptSLPredicate> set = getExistingPredicates(statement, seed);
+	public boolean addNewPred(IAnalysisSeed seedObj, Statement statement, Val variable, EnsuredCryptSLPredicate ensPred) {
+		Set<EnsuredCryptSLPredicate> set = getExistingPredicates(statement, variable);
 		boolean added = set.add(ensPred);
-		assert existingPredicates.get(statement, seed).contains(ensPred);
+		assert existingPredicates.get(statement, variable).contains(ensPred);
 		if (added) {
-			onPredicateAdded(seedObj, statement, seed, ensPred);
+			onPredicateAdded(seedObj, statement, variable, ensPred);
 		}
 		cryptoScanner.getAnalysisListener().onSecureObjectFound(seedObj);
 		Set<EnsuredCryptSLPredicate> predsObjBased = existingPredicatesObjectBased.get(statement, seedObj);
