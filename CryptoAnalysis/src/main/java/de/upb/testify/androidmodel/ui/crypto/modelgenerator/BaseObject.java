@@ -53,6 +53,8 @@ public class BaseObject {
   }
 
   protected void addParameter(AnalysisSeedWithSpecification paramsSeed, BaseObject baseObjectForSeed) {
+    // TODO params need to have an index telling their position in a call
+    // TODO also, parameters should be bound to methods and a base object can have more than one method call right?
     params.put(paramsSeed, baseObjectForSeed);
   }
 
