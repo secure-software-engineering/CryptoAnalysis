@@ -141,6 +141,9 @@ public final class RuleTree {
             }
         }
 
+    // FIXME can there be the case that no valid rule exists? this would lead to a NullPointerException when getData is
+    // called on a null key
+
         return validRule.getKey().getData().getClassSpecification();
     }
 
