@@ -13,6 +13,7 @@ import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import soot.Scene;
@@ -35,6 +36,7 @@ public class ObjectModel {
     baseObjects = new HashMap<>();
   }
 
+  @XmlElement(name = "BaseObject")
   public Collection<BaseObject> getObjects() {
     return baseObjects.values();
   }
@@ -71,7 +73,7 @@ public class ObjectModel {
 
       for (AnalysisSeedWithSpecification paramsSeed : stmtToSeed.get(param.getValue().stmt())) {
         // Change the first parameter to the name of the type of parameter.
-        baseObjectForSeed.getMapOfParameters().put(paramsSeed.toString(), baseObjectForSeed(paramsSeed, stmtToSeed));
+        baseObjectForSeed.addParameter(paramsSeed, baseObjectForSeed(paramsSeed, stmtToSeed));
       }
     }
 

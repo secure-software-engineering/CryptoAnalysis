@@ -1,28 +1,26 @@
 package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 
+import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.SootClassXmlAdapter;
+import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.SootMethodXmlAdapter;
+import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.StatementXmlAdapter;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import soot.SootClass;
 import soot.SootMethod;
 
 import boomerang.jimple.Statement;
+import crypto.analysis.AnalysisSeedWithSpecification;
 
-@XmlRootElement(name = "BaseObject")
-// @XmlAccessorType(XmlAccessType.FIELD)
 public class BaseObject {
 
   private static int ID_COUNTER = 0;
@@ -30,75 +28,50 @@ public class BaseObject {
   private Statement allocationSite;
   private SootClass sootClass;
   private int id;
-  private String ruleName;
-  private Multimap<String, BaseObject> mapOfParameters;
+  private String rule;
+  private Multimap<AnalysisSeedWithSpecification, BaseObject> params;
   private SootMethod method;
 
-  public BaseObject(Statement allocationSite, String ruleName, SootClass sootClass, SootMethod method) {
-    this.allocationSite = allocationSite;
-    this.id = nextID();
-    this.ruleName = ruleName;
-    mapOfParameters = ArrayListMultimap.create();
-    this.sootClass = sootClass;
-    this.method = method;
+  /**
+   * Used for serialization
+   */
+  protected BaseObject() {
+
   }
 
-  // FIXME For testing
-  public BaseObject(Statement allocationSite, String ruleName) {
+  public BaseObject(Statement allocationSite, String rule, SootClass sootClass, SootMethod method) {
     this.allocationSite = allocationSite;
     this.id = nextID();
-    this.ruleName = ruleName;
-    mapOfParameters = ArrayListMultimap.create();
+    this.rule = rule;
+    params = ArrayListMultimap.create();
+    this.sootClass = sootClass;
+    this.method = method;
   }
 
   private static int nextID() {
     return ID_COUNTER++;
   }
 
-  // @XmlElement
-  public Multimap<String, BaseObject> getMapOfParameters() {
-    return mapOfParameters;
+  protected void addParameter(AnalysisSeedWithSpecification paramsSeed, BaseObject baseObjectForSeed) {
+    params.put(paramsSeed, baseObjectForSeed);
   }
 
   @XmlElement
   @XmlIDREF
-  public List<BaseObject> getMapOfParametersForXMLBaseObject() {
-
-    List<BaseObject> combinedList = new ArrayList<>();
-    for (String s : mapOfParameters.keySet()) {
-
-      for (Object o : mapOfParameters.get(s).toArray()) {
-        if (o != null) {
-          combinedList.add((BaseObject) o);
-        }
-      }
-
-      // combinedList.addAll();
-    }
-
-    return combinedList;
+  public Collection<BaseObject> getParameters() {
+    return params.values();
   }
 
-  /*
-   * public void setMapOfParameters(Multimap<String, BaseObject> mapOfParameters) { this.mapOfParameters = mapOfParameters; }
-   */
-
+  @XmlElement
+  @XmlJavaTypeAdapter(StatementXmlAdapter.class)
   public Statement getAllocationSite() {
     return allocationSite;
   }
 
   @XmlElement
-  public String getAllocationSiteString() {
-    return allocationSite.toString().replace("<", "").replace(">", "");
-  }
-
+  @XmlJavaTypeAdapter(SootClassXmlAdapter.class)
   public SootClass getSootClass() {
     return sootClass;
-  }
-
-  @XmlAttribute
-  public String getSootClassString() {
-    return sootClass.toString();
   }
 
   // Using ID to create a reference to the sub base objects.
@@ -109,26 +82,12 @@ public class BaseObject {
   }
 
   @XmlAttribute
-  public String getRuleName() {
-    return ruleName;
+  public String getRule() {
+    return rule;
   }
 
-  // public getMapOfParametersString
-
-  public String returnXMLNode() {
-    StringWriter forString = new StringWriter();
-    try {
-      JAXBContext context = JAXBContext.newInstance(BaseObject.class);
-      Marshaller marshaller = context.createMarshaller();
-      marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-      marshaller.marshal(this, forString);
-    } catch (JAXBException e) {
-      e.printStackTrace();
-    }
-    return forString.toString();
-  }
-
-  @XmlAttribute
+  @XmlElement
+  @XmlJavaTypeAdapter(SootMethodXmlAdapter.class)
   public SootMethod getMethod() {
     return method;
   }

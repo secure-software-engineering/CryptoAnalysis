@@ -97,7 +97,7 @@ public abstract class CryptoScanner {
       e.printStackTrace();
     } catch (IOException e) {
       e.printStackTrace();
-        }
+    }
 
         /*List<AllocationSitesWithUIDs> dataUIClassHierarchy = getHierarchyRelationshipData(listOfAnalysisSeeds);
 
