@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import soot.RefType;
-import soot.SootClass;
 import soot.SootMethod;
 import soot.Type;
 import soot.Unit;
@@ -95,21 +94,14 @@ public class FiniteStateMachineToTypestateChangeFunction extends TypeStateMachin
                     NewExpr newExpr = (NewExpr) as.getRightOp();
                     Type type = newExpr.getType();
 
-                    if(analyzedType.equals(type)){
+          if (analyzedType.equals(type)
+              // current specification can be null if the call to this method came from the overloaded method.
+              || (currentSpecification != null
+                  // Check if the class specification under consideration is the same as the valid one for the
+                  // soot class under consideration.
+                  && currentSpecification.equals(RuleTree.getRule(((RefType) type).getSootClass())))) {
                         AssignStmt stmt = (AssignStmt) unit;
                         out.add(createQuery(unit,method,new AllocVal(stmt.getLeftOp(), method, as.getRightOp(), new Statement(stmt, method))));
-                    }
-                    else {
-                        // current specification can be null if the call to this method came from the overloaded method.
-                        if (currentSpecification != null){
-                            SootClass classUnderConsideration = ((RefType)type).getSootClass();
-                            // Check if the class specification under consideration is the same as the valid one for the
-                            // soot class under consideration.
-                            if (currentSpecification.equals(RuleTree.getRule(classUnderConsideration))){
-                                AssignStmt stmt = (AssignStmt) unit;
-                                out.add(createQuery(unit,method,new AllocVal(stmt.getLeftOp(), method, as.getRightOp(), new Statement(stmt, method))));
-                            }
-                        }
                     }
                 }
             }
