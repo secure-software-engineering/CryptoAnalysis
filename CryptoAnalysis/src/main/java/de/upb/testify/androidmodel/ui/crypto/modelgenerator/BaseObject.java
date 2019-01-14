@@ -52,6 +52,17 @@ public class BaseObject {
     return ID_COUNTER++;
   }
 
+  @XmlElement
+  @XmlJavaTypeAdapter(StatementXmlAdapter.class)
+  public Statement getAllocationSite() {
+    return allocationSite;
+  }
+
+  // TODO manuel: As far as I understand, method,class and params belong to a call on this BaseObject
+  // There should really be another class for methodcalls which the BaseObject has a list of. This class should than
+  // reference the called method and its parameters. class does not need to be saved separately, since the method already
+  // know the class it belongs to
+
   protected void addParameter(AnalysisSeedWithSpecification paramsSeed, BaseObject baseObjectForSeed) {
     // TODO params need to have an index telling their position in a call
     // TODO also, parameters should be bound to methods and a base object can have more than one method call right?
@@ -65,15 +76,15 @@ public class BaseObject {
   }
 
   @XmlElement
-  @XmlJavaTypeAdapter(StatementXmlAdapter.class)
-  public Statement getAllocationSite() {
-    return allocationSite;
-  }
-
-  @XmlElement
   @XmlJavaTypeAdapter(SootClassXmlAdapter.class)
   public SootClass getSootClass() {
     return sootClass;
+  }
+
+  @XmlElement
+  @XmlJavaTypeAdapter(SootMethodXmlAdapter.class)
+  public SootMethod getMethod() {
+    return method;
   }
 
   // Using ID to create a reference to the sub base objects.
@@ -86,11 +97,5 @@ public class BaseObject {
   @XmlAttribute
   public String getRule() {
     return rule;
-  }
-
-  @XmlElement
-  @XmlJavaTypeAdapter(SootMethodXmlAdapter.class)
-  public SootMethod getMethod() {
-    return method;
   }
 }
