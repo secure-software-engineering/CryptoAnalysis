@@ -1,25 +1,21 @@
 package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 
+import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.MethodCallAdapter;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.SootClassXmlAdapter;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.SootMethodXmlAdapter;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.StatementXmlAdapter;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
-import java.util.Collection;
+import java.util.ArrayList;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
-import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import soot.SootClass;
 import soot.SootMethod;
 
 import boomerang.jimple.Statement;
-import crypto.analysis.AnalysisSeedWithSpecification;
 
 public class BaseObject {
 
@@ -29,8 +25,8 @@ public class BaseObject {
   private SootClass sootClass;
   private int id;
   private String rule;
-  private Multimap<AnalysisSeedWithSpecification, BaseObject> params;
   private SootMethod method;
+  private ArrayList<MethodCall> methodCallsOnObject;
 
   /**
    * Used for serialization
@@ -43,9 +39,9 @@ public class BaseObject {
     this.allocationSite = allocationSite;
     this.id = nextID();
     this.rule = rule;
-    params = ArrayListMultimap.create();
     this.sootClass = sootClass;
     this.method = method;
+    this.methodCallsOnObject = new ArrayList<>();
   }
 
   private static int nextID() {
@@ -63,17 +59,16 @@ public class BaseObject {
   // reference the called method and its parameters. class does not need to be saved separately, since the method already
   // know the class it belongs to
 
-  protected void addParameter(AnalysisSeedWithSpecification paramsSeed, BaseObject baseObjectForSeed) {
-    // TODO params need to have an index telling their position in a call
-    // TODO also, parameters should be bound to methods and a base object can have more than one method call right?
-    params.put(paramsSeed, baseObjectForSeed);
+
+  protected void addMethodCall(MethodCall methodCall){
+      methodCallsOnObject.add(methodCall);
+  }
+    @XmlElement
+    //@XmlJavaTypeAdapter(MethodCallAdapter.class)
+  public ArrayList<MethodCall> getMethodCallsOnObject() {
+    return methodCallsOnObject;
   }
 
-  @XmlElement
-  @XmlIDREF
-  public Collection<BaseObject> getParameters() {
-    return params.values();
-  }
 
   @XmlElement
   @XmlJavaTypeAdapter(SootClassXmlAdapter.class)
@@ -98,4 +93,5 @@ public class BaseObject {
   public String getRule() {
     return rule;
   }
+
 }
