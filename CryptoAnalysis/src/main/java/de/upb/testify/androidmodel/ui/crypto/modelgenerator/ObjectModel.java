@@ -6,6 +6,7 @@ import com.google.common.collect.Multimaps;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,9 +72,13 @@ public class ObjectModel {
     for (Map.Entry<CallSiteWithParamIndex, ExtractedValue> param : analysisSeed.getParameterAnalysis().getCollectedValues()
         .entries()) {
 
+        // Create entries for the method calls.
+        MethodCall methodCall =  new MethodCall(param.getKey().stmt());
+        baseObjectForSeed.addMethodCall(methodCall);
+        // Create entries for the parameters for each method call.
       for (AnalysisSeedWithSpecification paramsSeed : stmtToSeed.get(param.getValue().stmt())) {
         // Change the first parameter to the name of the type of parameter.
-        baseObjectForSeed.addParameter(paramsSeed, baseObjectForSeed(paramsSeed, stmtToSeed));
+          methodCall.addParameter(paramsSeed, baseObjectForSeed(paramsSeed, stmtToSeed));
       }
     }
 
