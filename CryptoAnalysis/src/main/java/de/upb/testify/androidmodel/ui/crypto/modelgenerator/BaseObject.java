@@ -25,7 +25,7 @@ public class BaseObject {
   private SootClass sootClass;
   private int id;
   private String rule;
-  private SootMethod method;
+  //private SootMethod method;
   private ArrayList<MethodCall> methodCallsOnObject;
 
   /**
@@ -35,12 +35,12 @@ public class BaseObject {
 
   }
 
-  public BaseObject(Statement allocationSite, String rule, SootClass sootClass, SootMethod method) {
+  public BaseObject(Statement allocationSite, String rule, SootClass sootClass) {
     this.allocationSite = allocationSite;
     this.id = nextID();
     this.rule = rule;
     this.sootClass = sootClass;
-    this.method = method;
+    //this.method = method;
     this.methodCallsOnObject = new ArrayList<>();
   }
 
@@ -76,11 +76,11 @@ public class BaseObject {
     return sootClass;
   }
 
-  @XmlElement
+  /*@XmlElement
   @XmlJavaTypeAdapter(SootMethodXmlAdapter.class)
   public SootMethod getMethod() {
     return method;
-  }
+  }*/
 
   // Using ID to create a reference to the sub base objects.
   @XmlAttribute

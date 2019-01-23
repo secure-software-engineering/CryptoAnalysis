@@ -64,7 +64,7 @@ public class ObjectModel {
 
     // The first parameter is the allocation site, 2nd is the unique id, and the third is the rule name.
     BaseObject baseObjectForSeed = new BaseObject(analysisSeed.stmt(), ruleFromAnalysisSeedParam.getClassName(),
-        sootClassVarForAnalysisSeedParam, analysisSeed.stmt().getMethod());
+        sootClassVarForAnalysisSeedParam);
 
     baseObjects.put(analysisSeed, baseObjectForSeed);
 
