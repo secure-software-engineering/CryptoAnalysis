@@ -78,7 +78,7 @@ public class BaseObject {
 
   /*@XmlElement
   @XmlJavaTypeAdapter(SootMethodXmlAdapter.class)
-  public SootMethod getMethod() {
+  public SootMethod getMethodString() {
     return method;
   }*/
 
