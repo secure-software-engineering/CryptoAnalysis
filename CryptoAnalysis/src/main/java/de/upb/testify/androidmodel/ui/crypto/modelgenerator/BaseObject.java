@@ -72,12 +72,6 @@ public class BaseObject {
     return sootClass;
   }
 
-  /*@XmlElement
-  @XmlJavaTypeAdapter(SootMethodXmlAdapter.class)
-  public SootMethod getMethodString() {
-    return method;
-  }*/
-
   // Using ID to create a reference to the sub base objects.
   @XmlAttribute
   @XmlID
