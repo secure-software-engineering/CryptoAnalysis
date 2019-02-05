@@ -1,21 +1,20 @@
 package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 
 import boomerang.jimple.Statement;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
 import crypto.analysis.AnalysisSeedWithSpecification;
-import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.MethodCallAdapter;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.StatementXmlAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MethodCall {
 
     private Statement callSite;
-    private Multimap<AnalysisSeedWithSpecification, BaseObject> params;
+    private Map<AnalysisSeedWithSpecification, BaseObject> params;
 
     // For serialization.
     public MethodCall() {
@@ -23,7 +22,7 @@ public class MethodCall {
 
     public MethodCall(Statement callSite) {
         this.callSite = callSite;
-        this.params = ArrayListMultimap.create();
+        this.params = new HashMap<>();
     }
     @XmlElement
     @XmlJavaTypeAdapter(StatementXmlAdapter.class)
@@ -31,7 +30,7 @@ public class MethodCall {
         return callSite;
     }
 
-    public Multimap<AnalysisSeedWithSpecification, BaseObject> getParams() {
+    public Map<AnalysisSeedWithSpecification, BaseObject> getParams() {
         return params;
     }
 
