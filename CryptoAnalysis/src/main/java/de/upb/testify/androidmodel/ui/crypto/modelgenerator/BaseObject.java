@@ -1,8 +1,6 @@
 package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 
-import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.MethodCallAdapter;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.SootClassXmlAdapter;
-import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.SootMethodXmlAdapter;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.StatementXmlAdapter;
 
 import java.util.ArrayList;
@@ -13,7 +11,6 @@ import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import soot.SootClass;
-import soot.SootMethod;
 
 import boomerang.jimple.Statement;
 
@@ -64,7 +61,6 @@ public class BaseObject {
       methodCallsOnObject.add(methodCall);
   }
     @XmlElement
-    //@XmlJavaTypeAdapter(MethodCallAdapter.class)
   public ArrayList<MethodCall> getMethodCallsOnObject() {
     return methodCallsOnObject;
   }
