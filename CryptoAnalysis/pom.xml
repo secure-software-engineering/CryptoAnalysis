@@ -118,7 +118,7 @@
 		<dependency>
 			<groupId>de.fraunhofer.iem</groupId>
 			<artifactId>idealPDS</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>1.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.fraunhofer.iem</groupId>
@@ -224,7 +224,12 @@
 			<artifactId>maven-invoker-plugin</artifactId>
 			<version>3.1.0</version>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>1.4</version>
+		</dependency>
 
 	</dependencies>
 

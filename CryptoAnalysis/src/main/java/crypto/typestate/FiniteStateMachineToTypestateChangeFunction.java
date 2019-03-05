@@ -43,7 +43,6 @@ public class FiniteStateMachineToTypestateChangeFunction extends TypeStateMachin
 				} else {
 					// This code was added to detect unidentified outlying cases affected by the changes made for issue #47.
 					if (analyzedType != m.getDeclaringClass().getType()){
-
                         try {
                             throw new Exception("The type of m.getDeclaringClass() does not appear to be consistent across fsm.initialTransitonLabel().");
                         } catch (Exception e) {
@@ -59,8 +58,26 @@ public class FiniteStateMachineToTypestateChangeFunction extends TypeStateMachin
 
 	@Override
 	public Collection<WeightedForwardQuery<TransitionFunction>> generateSeed(SootMethod method, Unit unit, Collection<SootMethod> optional) {
-		// Call to the overloaded method with the current class specification as null.
-		return generateSeed(method, unit, optional, null);
+		Set<WeightedForwardQuery<TransitionFunction>> out = new HashSet<>();
+		if(CryptoScanner.APPLICATION_CLASS_SEEDS_ONLY && !method.getDeclaringClass().isApplicationClass()){
+			return out;
+		}
+		if (!(unit instanceof Stmt) || !((Stmt) unit).containsInvokeExpr())
+			return out;
+		InvokeExpr invokeExpr = ((Stmt) unit).getInvokeExpr();
+		SootMethod calledMethod = invokeExpr.getMethod();
+		if (!fsm.initialTransitonLabel().contains(calledMethod))
+			return out;
+		if (calledMethod.isStatic()) {
+			if(unit instanceof AssignStmt){
+				AssignStmt stmt = (AssignStmt) unit;
+				out.add(createQuery(stmt,method,new AllocVal(stmt.getLeftOp(), method, stmt.getRightOp(), new Statement(stmt,method))));
+			}
+		} else if (invokeExpr instanceof InstanceInvokeExpr){
+			InstanceInvokeExpr iie = (InstanceInvokeExpr) invokeExpr;
+			out.add(createQuery(unit,method,new AllocVal(iie.getBase(), method,iie, new Statement((Stmt) unit,method))));
+		}
+		return out;
 	}
 
 	private WeightedForwardQuery<TransitionFunction> createQuery(Unit unit, SootMethod method, AllocVal allocVal) {
