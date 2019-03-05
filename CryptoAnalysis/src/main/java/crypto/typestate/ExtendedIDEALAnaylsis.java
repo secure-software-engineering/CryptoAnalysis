@@ -152,6 +152,7 @@ public abstract class ExtendedIDEALAnaylsis {
 	 * @param currentSpecification The specification that is currently under consideration in the CryptoScanner loop.
 	 * @return
 	 */
+	/* The merge appears to have not removed this method.
 	public Set<WeightedForwardQuery<TransitionFunction>> computeInitialSeeds(ClassSpecification currentSpecification) {
 		Set<WeightedForwardQuery<TransitionFunction>> seeds = new HashSet<>();
 		ReachableMethods rm = Scene.v().getReachableMethods();
@@ -161,7 +162,7 @@ public abstract class ExtendedIDEALAnaylsis {
 			seeds.addAll(computeSeeds(next.method(),currentSpecification));
 		}
 		return seeds;
-	}
+	}*/
 
 	/**
 	 * Overloaded the computeSeeds() method to be able to identify whether the current specification is valid.
@@ -169,6 +170,7 @@ public abstract class ExtendedIDEALAnaylsis {
 	 * @param currentSpecification The specification that is currently under consideration in the CryptoScanner loop.
 	 * @return
 	 */
+	/* The merge appears to have not removed this method.
 	private Collection<WeightedForwardQuery<TransitionFunction>> computeSeeds(SootMethod method, ClassSpecification currentSpecification) {
 		Collection<WeightedForwardQuery<TransitionFunction>> seeds = new HashSet<>();
 		if (!method.hasActiveBody())
@@ -179,6 +181,6 @@ public abstract class ExtendedIDEALAnaylsis {
 			seeds.addAll( getOrCreateTypestateChangeFunction().generateSeed(method, u, calledMethods,currentSpecification));
 		}
 		return seeds;
-	}
+	}*/
 
 }

@@ -99,6 +99,7 @@ public class FiniteStateMachineToTypestateChangeFunction extends TypeStateMachin
      * @param currentSpecification The specification that is currently under consideration in the CryptoScanner loop.
      * @return
      */
+    /* The merge appears to have not removed this method.
     public Collection<WeightedForwardQuery<TransitionFunction>> generateSeed(SootMethod method, Unit unit, Collection<SootMethod> optional, ClassSpecification currentSpecification) {
         Set<WeightedForwardQuery<TransitionFunction>> out = new HashSet<>();
         if(CryptoScanner.APPLICATION_CLASS_SEEDS_ONLY && !method.getDeclaringClass().isApplicationClass()){
@@ -139,5 +140,5 @@ public class FiniteStateMachineToTypestateChangeFunction extends TypeStateMachin
             out.add(createQuery(unit,method,new AllocVal(iie.getBase(), method,iie, new Statement((Stmt) unit,method))));
         }
         return out;
-    }
+    }*/
 }
