@@ -8,7 +8,6 @@ import com.google.common.collect.Lists;
 
 import heros.utilities.DefaultValueMap;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,13 +16,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
-import javax.xml.bind.JAXBException;
-
 import soot.SootMethod;
-import soot.Unit;
-import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
 
 import boomerang.Query;
 import boomerang.debugger.Debugger;
@@ -35,7 +28,6 @@ import crypto.typestate.CryptSLMethodToSootMethod;
 import ideal.IDEALSeedSolver;
 import soot.MethodOrMethodContext;
 import soot.Scene;
-import soot.SootMethod;
 import soot.Unit;
 import soot.jimple.toolkits.callgraph.ReachableMethods;
 import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
@@ -83,7 +75,7 @@ public abstract class CryptoScanner {
 		CryptSLMethodToSootMethod.reset();
 	}
 
-	public void scan(List<CryptSLRule> specs) {
+	public ObjectModel scan(List<CryptSLRule> specs) {
 		for (CryptSLRule rule : specs) {
 			specifications.add(new ClassSpecification(rule, this));
 		}
@@ -103,13 +95,7 @@ public abstract class CryptoScanner {
 
     ObjectModel objectModel = new ObjectModel();
     objectModel.addObjectsBySeed(getAnalysisSeeds());
-    try {
-      objectModel.toXml(System.out);
-    } catch (JAXBException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+
 		predicateHandler.checkPredicates();
 
 		for (AnalysisSeedWithSpecification seed : getAnalysisSeeds()) {
@@ -122,6 +108,7 @@ public abstract class CryptoScanner {
 		elapsed = analysisWatch.elapsed(TimeUnit.SECONDS);
 		logger.info("Static Analysis took " + elapsed + " seconds!");
 //		debugger().afterAnalysis();
+		return objectModel;
 	}
 
 	private void estimateAnalysisTime() {
