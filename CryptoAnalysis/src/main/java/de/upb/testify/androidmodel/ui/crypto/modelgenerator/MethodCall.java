@@ -3,6 +3,8 @@ package de.upb.testify.androidmodel.ui.crypto.modelgenerator;
 import boomerang.jimple.Statement;
 import crypto.analysis.AnalysisSeedWithSpecification;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.toXml.StatementXmlAdapter;
+import de.upb.testify.soot.IMethodContainer;
+import soot.SootMethod;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlIDREF;
@@ -11,7 +13,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MethodCall {
+public class MethodCall implements IMethodContainer {
 
     private Statement callSite;
     private Map<AnalysisSeedWithSpecification, BaseObject> params;
@@ -44,5 +46,10 @@ public class MethodCall {
     @XmlIDREF
     public Collection<BaseObject> getParameters() {
         return params.values();
+    }
+
+    @Override
+    public SootMethod getMethod() {
+        return callSite.getMethod();
     }
 }
