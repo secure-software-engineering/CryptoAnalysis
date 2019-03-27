@@ -1,0 +1,118 @@
+SPEC android.content.Intent 
+OBJECTS
+android.content.Intent o;
+java.lang.String action;
+android.net.Uri uri;
+android.content.Context packageContext;
+java.lang.Class cls; // Class<?> Not sure if this is allowed in the syntax
+
+java.lang.String category;
+
+int flags;
+
+java.lang.String name;
+
+android.os.Parcelable parcelableValue;
+long[] longArrayValue;
+byte byteValue;
+double[] doubleArrayValue;
+java.lang.CharSequence charSequenceValue;
+boolean[] booleanArrayValue;
+int intValue;
+char[] charArrayValue;
+byte[] byteArrayValue;
+android.os.Parcelable parcelableArrayValue;
+android.os.Bundle bundleValue;
+java.lang.CharSequence charSequenceArrayValue;
+float[] floatArrayValue;
+double doubleValue;
+int[] intArrayValue;
+java.lang.String[] stringArrayValue;
+short[] shortArrayvalue;
+boolean booleanValue;
+java.lang.String stringValue;
+long longValue;
+char charValue;
+java.io.Serializable serializableValue;
+float floatValue;
+short shortValue;
+
+android.content.Intent src;
+android.os.Bundle extras;
+
+android.content.Context packageContext;
+
+java.lang.String packageName;
+java.lang.String className;
+
+android.content.ComponentName component;
+
+android.net.Uri data;
+
+java.lang.String type;
+EVENTS
+//Constructors
+pc1: Intent();
+pc2: Intent(o);
+pc3: Intent(action);
+pc4: Intent(action, uri);
+pc5: Intent(packageContext, cls); 
+pc6: Intent(action, uri, packageContext, cls);
+public_constructor := pc1 | pc2 | pc3 | pc4 | pc5 | pc6;
+
+addCategory: addCategory(category);
+
+addFlags: addFlags(flags);
+
+pe1: putExtra(name, parcelableValue);
+pe2: putExtra(name, longArrayValue);
+pe3: putExtra(name, byteValue);
+pe4: putExtra(name, doubleArrayValue);
+pe5: putExtra(name, charSequenceValue);
+pe6: putExtra(name, booleanArrayValue);
+pe7: putExtra(name, intValue);
+pe8: putExtra(name, charArrayValue);
+pe9: putExtra(name, byteArrayValue);
+pe10: putExtra(name, parcelableArrayValue);
+pe11: putExtra(name, bundleValue);
+pe12: putExtra(name, charSequenceArrayValue);
+pe13: putExtra(name, floatArrayValue);
+pe14: putExtra(name, doubleValue);
+pe15: putExtra(name, intArrayValue);
+pe16: putExtra(name, stringArrayValue);
+pe17: putExtra(name, shortArrayvalue);
+pe18: putExtra(name, booleanValue);
+pe19: putExtra(name, stringValue);
+pe20: putExtra(name, longValue);
+pe21: putExtra(name, charValue);
+pe22: putExtra(name, serializableValue);
+pe23: putExtra(name, floatValue);
+pe24: putExtra(name, shortValue);
+put_extra := pe1 | pe2 | pe3 | pe4 | pe5 | pe6 | pe7 | pe8 | pe9 | pe10 | pe11 | pe12 | pe13 | pe14 | pe15 | pe16 | pe17 | pe18 | pe19 | pe20 | pe21 | pe22 | pe23 | pe24;
+
+pes1: putExtras(src);
+pes2: putExtras(extras);
+put_extras := pes1 | pes2; 
+
+
+re1: replaceExtras(src); 
+re2: replaceExtras(extras);
+replace_extra := re1 | re2;
+
+set_action: setAction(action);
+
+set_class : setClass(packageContext, cls); // Class<?>
+scn1: setClassName(packageName, className);
+scn2: setClassName(packageContext, className);
+set_class_name := scn1 | scn2;
+
+set_component: setComponent(component);
+
+set_data: setData(data);
+set_data_and_normalize: setDataAndNormalize(data); 
+set_data_and_type: setDataAndType(data, type);
+set_data_and_type_and_normalize: setDataAndTypeAndNormalize(data, type);
+
+ORDER
+
+public_constructor | addCategory | addFlags | put_extra | put_extras | replace_extra | set_action | set_class | set_class_name | set_component
