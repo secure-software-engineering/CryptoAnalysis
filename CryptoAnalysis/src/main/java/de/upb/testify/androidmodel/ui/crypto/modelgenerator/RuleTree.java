@@ -86,7 +86,7 @@ public final class RuleTree {
                 ListIterator<TreeNode<TreeNodeData>> treeNodeListIterator = parent.getChildren().listIterator();
                 while (treeNodeListIterator.hasNext()) {
                     TreeNode<TreeNodeData> child = treeNodeListIterator.next();
-                    System.out.println("child: " + child.getData().getClassSpecification().toString() + "  parent: " + parent.getData().getClassSpecification().toString());
+                    //System.out.println("child: " + child.getData().getClassSpecification().toString() + "  parent: " + parent.getData().getClassSpecification().toString());
                     if (child.getData().getSootClass() != nodeUnderConsideration.getData().getSootClass()) {
                         if (Scene.v().getOrMakeFastHierarchy().isSubclass(child.getData().getSootClass(), nodeUnderConsideration.getData().getSootClass())) {
                             treeNodeListIterator.remove();
