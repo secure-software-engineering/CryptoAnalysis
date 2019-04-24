@@ -33,11 +33,16 @@ import javax.security.auth.DestroyFailedException;
 
 import org.junit.Test;
 
+import crypto.analysis.Constants.Ruleset;
 import test.UsagePatternTestingFramework;
 import test.assertions.Assertions;
 
 public class UsagePatternTest extends UsagePatternTestingFramework {
 
+	@Override
+	protected Ruleset getRuleSet() {
+		return Ruleset.JavaCryptographicArchitecture;
+	}
 	@Test
 	public void useDoFinalInLoop() throws GeneralSecurityException{
 		KeyGenerator keygen = KeyGenerator.getInstance("AES");
@@ -57,6 +62,22 @@ public class UsagePatternTest extends UsagePatternTestingFramework {
 			Assertions.hasEnsuredPredicate(enc);
 		}
 		Assertions.mustNotBeInAcceptingState(cCipher);
+		Assertions.hasEnsuredPredicate(enc);
+	}
+	
+	@Test
+	public void caseInsensitiveNames() throws GeneralSecurityException{
+		KeyGenerator keygen = KeyGenerator.getInstance("aes");
+		Assertions.extValue(0);
+		keygen.init(128);
+		Assertions.extValue(0);
+		SecretKey key = keygen.generateKey();
+		Assertions.hasEnsuredPredicate(key);
+		Cipher cCipher = Cipher.getInstance("Aes/CbC/pKCS5PADDING");
+		Assertions.extValue(0);
+		cCipher.init(Cipher.ENCRYPT_MODE, key);
+		byte[] enc = cCipher.doFinal("".getBytes());
+		Assertions.mustBeInAcceptingState(cCipher);
 		Assertions.hasEnsuredPredicate(enc);
 	}
 	
@@ -576,7 +597,15 @@ public class UsagePatternTest extends UsagePatternTestingFramework {
 		final PBEKeySpec pbekeyspec = new PBEKeySpec(falsePwd);
 		Assertions.callToForbiddenMethod();
 	}
+	@Test
+	public void UsagePatternMinPBEIterationsMinimized() throws GeneralSecurityException, IOException {
+		final byte[] salt = new byte[32];
+		SecureRandom.getInstanceStrong().nextBytes(salt);
 
+		char[] corPwd = new char[] { 'p', 'a', 's', 's', 'w', 'o', 'r', 'd' };
+		PBEKeySpec pbekeyspec = new PBEKeySpec(corPwd, salt, 100000, 128);
+		Assertions.extValue(1);
+	}
 	@Test
 	public void UsagePatternMinPBEIterations() throws GeneralSecurityException, IOException {
 		final byte[] salt = new byte[32];

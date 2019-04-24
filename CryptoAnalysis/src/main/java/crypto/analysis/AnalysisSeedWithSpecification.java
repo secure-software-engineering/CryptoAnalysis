@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Set;
 
 import com.google.common.collect.HashMultimap;
@@ -17,6 +18,7 @@ import com.google.common.collect.Sets;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
+import boomerang.callgraph.ObservableICFG;
 import boomerang.debugger.Debugger;
 import boomerang.jimple.AllocVal;
 import boomerang.jimple.Statement;
@@ -93,7 +95,7 @@ public class AnalysisSeedWithSpecification extends IAnalysisSeed {
 			}
 
 			@Override
-			protected BiDiInterproceduralCFG<Unit, SootMethod> icfg() {
+			protected ObservableICFG<Unit, SootMethod> icfg() {
 				return cryptoScanner.icfg();
 			}
 
@@ -306,11 +308,11 @@ public class AnalysisSeedWithSpecification extends IAnalysisSeed {
 			Type baseType = accessGraph.value().getType();
 			if (baseType instanceof RefType) {
 				RefType refType = (RefType) baseType;
-				if (spec.getRule().getClassName().equals(refType.getSootClass().getName())) {
+				if (spec.getRule().getClassName().equals(refType.getSootClass().getName()) || spec.getRule().getClassName().equals(refType.getSootClass().getShortName())) {
 					if (satisfiesConstraintSytem) {
-					AnalysisSeedWithSpecification seed = cryptoScanner.getOrCreateSeedWithSpec(
-							new AnalysisSeedWithSpecification(cryptoScanner, currStmt, accessGraph, spec));
-					matched = true;
+						AnalysisSeedWithSpecification seed = cryptoScanner.getOrCreateSeedWithSpec(
+								new AnalysisSeedWithSpecification(cryptoScanner, currStmt, accessGraph, spec));
+						matched = true;
 						seed.addEnsuredPredicateFromOtherRule(
 								new EnsuredCryptSLPredicate(predToBeEnsured, parameterAnalysis.getCollectedValues()));
 					}
@@ -455,7 +457,8 @@ public class AnalysisSeedWithSpecification extends IAnalysisSeed {
 					if (index > -1) {
 						foundVal = foundVal.split(splitter)[index];
 					}
-					requiredPredicatesExist &= actVals.contains(foundVal);
+					actVals = actVals.parallelStream().map(e -> e.toLowerCase()).collect(Collectors.toList());
+					requiredPredicatesExist &= actVals.contains(foundVal.toLowerCase());
 				}
 			} else {
 				requiredPredicatesExist = false;
@@ -587,6 +590,11 @@ public class AnalysisSeedWithSpecification extends IAnalysisSeed {
 
 	public void setSecure(boolean secure) {
 		this.secure = secure;
+	}
+
+	@Override
+	public Set<Node<Statement, Val>> getDataFlowPath() {
+		return results.getDataFlowPath();
 	}
 
 

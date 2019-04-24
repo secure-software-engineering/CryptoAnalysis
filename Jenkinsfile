@@ -4,7 +4,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'cd CryptoAnalysis; mvn clean compile'
+                sh 'cd CryptoAnalysis; mvn clean compile -U'
             }
         }
 
@@ -12,12 +12,17 @@ pipeline {
 	        steps {
 	            sh 'cd CryptoAnalysis; mvn test'
 	        }
+		    post {  
+	    		always {
+	                junit 'shippable/testresults/*.xml'
+	            }
+	        }
 		}
 
 
 		stage('Deploy'){
 		    when { 
-		    	branch 'master'
+		    	anyOf { branch 'master'; branch 'ofcg' } 
 			}
 	        steps {
 				configFileProvider(

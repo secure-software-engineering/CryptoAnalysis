@@ -23,6 +23,7 @@ import javax.xml.bind.JAXBException;
 import soot.SootMethod;
 
 import boomerang.Query;
+import boomerang.callgraph.ObservableICFG;
 import boomerang.debugger.Debugger;
 import boomerang.jimple.Statement;
 import boomerang.jimple.Val;
@@ -42,7 +43,6 @@ import typestate.TransitionFunction;
 
 public abstract class CryptoScanner {
 
-	public static boolean APPLICATION_CLASS_SEEDS_ONLY = false;
 	private final LinkedList<IAnalysisSeed> worklist = Lists.newLinkedList();
 	private final List<ClassSpecification> specifications = Lists.newLinkedList();
 	private final PredicateHandler predicateHandler = new PredicateHandler(this);
@@ -66,7 +66,7 @@ public abstract class CryptoScanner {
 	private int solvedObject;
 	private Stopwatch analysisWatch;
 
-	public abstract BiDiInterproceduralCFG<Unit, SootMethod> icfg();
+	public abstract ObservableICFG<Unit, SootMethod> icfg();
 
 	public CrySLResultsReporter getAnalysisListener() {
 		return resultsAggregator;
@@ -139,7 +139,7 @@ public abstract class CryptoScanner {
 		while (listener.hasNext()) {
 			MethodOrMethodContext next = listener.next();
 			SootMethod method = next.method();
-			if (method == null || !method.hasActiveBody()) {
+			if (method == null || !method.hasActiveBody() || !method.getDeclaringClass().isApplicationClass()) {
 				continue;
 			}
 			for (ClassSpecification spec : getClassSpecifictions()) {

@@ -1,4 +1,4 @@
-[![Run Status](https://api.shippable.com/projects/592827ffbcb263070086391d/badge?branch=master)](https://app.shippable.com/github/CROSSINGTUD/CryptoAnalysis)
+[![Build Status](https://soot-build.cs.uni-paderborn.de/jenkins/buildStatus/icon?job=boomerang%2FCryptoAnalysis-Multibranch%2Fmaster)](https://soot-build.cs.uni-paderborn.de/jenkins/job/boomerang/job/CryptoAnalysis-Multibranch/job/master/)
 
 # CogniCrypt<sub>SAST</sub>
 
@@ -12,7 +12,7 @@ libaries (the [JCA](https://docs.oracle.com/javase/7/docs/technotes/guides/secur
 You can checkout a pre-compiled version of CogniCrypt<sub>SAST</sub> [here](https://github.com/CROSSINGTUD/CryptoAnalysis/releases). 
 
 Download the two files:
-* CryptoAnalysis-1.0.0-jar-with-dependencies.jar
+* CryptoAnalysis-2.0-jar-with-dependencies.jar
 * JCA-CrySL-rules.zip
 
 ## Checkout and Build
@@ -21,7 +21,7 @@ CogniCrypt<sub>SAST</sub> uses maven as build tool. You can compile and build th
 
 ```mvn package -DskipTests=true```.
 
-A packaged  `jar` artifact including all dependency is found in `CryptoAnalysis/build/CryptoAnalysis-1.0.0-SNAPSHOT-jar-with-dependencies.jar` 
+A packaged  `jar` artifact including all dependency is found in `CryptoAnalysis/build/CryptoAnalysis-2.0-jar-with-dependencies.jar` 
 
 ## Usage
 
@@ -30,7 +30,7 @@ CogniCrypt<sub>SAST</sub> can be started in headless mode (i.e., detached from E
 * The absolute path of the application to be analyzed (.jar file or the root compilation output folder which contains the .class files in subdirectories)
 
 ```
-java -cp CryptoAnalysis/build/CryptoAnalysis-1.0.0-jar-with-dependencies.jar crypto.HeadlessCryptoScanner \
+java -cp CryptoAnalysis/build/CryptoAnalysis-2.0-jar-with-dependencies.jar crypto.HeadlessCryptoScanner \
       --rulesDir=<absolute-path-to-crysl-rules> \
       --applicationCp=<absolute-application-path>
 ```
@@ -38,7 +38,7 @@ java -cp CryptoAnalysis/build/CryptoAnalysis-1.0.0-jar-with-dependencies.jar cry
 For an easy start we prepared a .jar containing classes with crypto misuses. The source code for these misuses is found [here](https://github.com/CROSSINGTUD/CryptoAnalysis/tree/master/CryptoAnalysisTargets/CogniCryptDemoExample/src/example). To run CogniCrypt<sub>SAST</sub> on these classes, simply execute the following command (on a linux based system).
 
 ```
-java -cp CryptoAnalysis/build/CryptoAnalysis-1.0.0-jar-with-dependencies.jar crypto.HeadlessCryptoScanner \
+java -cp CryptoAnalysis/build/CryptoAnalysis-2.0-jar-with-dependencies.jar crypto.HeadlessCryptoScanner \
   --rulesDir=$(pwd)/CryptoAnalysis/src/test/resources/ \
   --applicationCp=$(pwd)/CryptoAnalysisTargets/CogniCryptDemoExample/Examples.jar
 ```
@@ -56,7 +56,7 @@ In the standard option, CogniCrypt<sub>SAST</sub> outputs a report to the consol
 * **TypestateError**: The ORDER block of CrySL is violated, i.e., the expected method sequence call to be made is incorrect. For example, a `Signature` object expects a call to `initSign(key)` prior to `update(data)`. 
 
 * **RequiredPredicateError**: An object A expects an object B to have been used correctly (CrySL blocks REQUIRES and ENSURES). For example a `Cipher` object requires a `SecretKey` object to be correctly and securely generated. 
-* **IncompleteOperationError**: The usage of an object may be incomplete: For example a `Cipher`object may be initialized but never used for en- or decryption, this may render the code dead. This error heavily depends on the computed call graph (CHA by default)
+* **IncompleteOperationError**: The usage of an object may be incomplete: For example a `Cipher`object may be initialized but never used for en- or decryption, this may render the code dead. This error heavily depends on the computed call graph (CHA by default).
 
 When the option `--reportDir=<folder>` is chosen, CogniCrypt<sub>SAST</sub> writes the report to the file `CogniCrypt-Report.txt` and additionally outputs the .jimple files of the classes where misuses where found in. Jimple is an intermediate representation close to the syntax of Java. 
 

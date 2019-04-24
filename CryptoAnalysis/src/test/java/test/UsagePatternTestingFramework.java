@@ -1,8 +1,6 @@
 package test;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -19,12 +17,15 @@ import com.google.common.collect.Table.Cell;
 
 import boomerang.BackwardQuery;
 import boomerang.Query;
+import boomerang.callgraph.ObservableDynamicICFG;
+import boomerang.callgraph.ObservableICFG;
 import boomerang.jimple.Statement;
 import boomerang.jimple.Val;
 import boomerang.preanalysis.BoomerangPretransformer;
 import boomerang.results.ForwardBoomerangResults;
 import crypto.Utils;
 import crypto.analysis.AnalysisSeedWithSpecification;
+import crypto.analysis.Constants.Ruleset;
 import crypto.analysis.CrySLAnalysisListener;
 import crypto.analysis.CrySLResultsReporter;
 import crypto.analysis.CryptoScanner;
@@ -42,7 +43,6 @@ import crypto.analysis.errors.RequiredPredicateError;
 import crypto.analysis.errors.TypestateError;
 import crypto.extractparameter.CallSiteWithParamIndex;
 import crypto.extractparameter.ExtractedValue;
-import crypto.interfaces.CrySLModelReader;
 import crypto.interfaces.ISLConstraint;
 import crypto.rules.CryptSLPredicate;
 import crypto.rules.CryptSLRule;
@@ -56,7 +56,6 @@ import soot.Value;
 import soot.jimple.IntConstant;
 import soot.jimple.InvokeExpr;
 import soot.jimple.Stmt;
-import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
 import soot.jimple.toolkits.ide.icfg.JimpleBasedInterproceduralCFG;
 import sync.pds.solver.nodes.Node;
 import test.assertions.Assertions;
@@ -78,22 +77,26 @@ import typestate.TransitionFunction;
 
 public abstract class UsagePatternTestingFramework extends AbstractTestingFramework{
 
-	protected BiDiInterproceduralCFG<Unit, SootMethod> icfg;
+	protected ObservableICFG<Unit, SootMethod> icfg;
+	private JimpleBasedInterproceduralCFG staticIcfg;
 	List<CryptSLRule> rules = Lists.newArrayList();
 	
 	@Override
 	protected SceneTransformer createAnalysisTransformer() throws ImprecisionException {
 		return new SceneTransformer() {
+
 			protected void internalTransform(String phaseName, @SuppressWarnings("rawtypes") Map options) {
 				BoomerangPretransformer.v().reset();
 				BoomerangPretransformer.v().apply();
-				icfg = new JimpleBasedInterproceduralCFG(true);
+				staticIcfg = new JimpleBasedInterproceduralCFG(true);
+//				icfg = new ObservableStaticICFG(new JimpleBasedInterproceduralCFG(true));
+				icfg = new ObservableDynamicICFG(true);
 				final Set<Assertion> expectedResults = extractBenchmarkMethods(sootTestMethod);
 				final TestingResultReporter resultReporter = new TestingResultReporter(expectedResults);
 				CryptoScanner scanner = new CryptoScanner() {
 					
 					@Override
-					public BiDiInterproceduralCFG<Unit, SootMethod> icfg() {
+					public ObservableICFG<Unit, SootMethod> icfg() {
 						return icfg;
 					}
 
@@ -311,10 +314,6 @@ public abstract class UsagePatternTestingFramework extends AbstractTestingFramew
 						reporters.addReportListener(cryslListener);
 						return reporters;
 					}
-//					@Override
-//					public IDebugger<TypestateDomainValue<StateNode>> debugger() {
-//						return UsagePatternTestingFramework.this.getDebugger();
-//					}
 
 					@Override
 					public boolean isCommandLineMode() {
@@ -367,23 +366,18 @@ public abstract class UsagePatternTestingFramework extends AbstractTestingFramew
 			return rules;
 		}
 
-		if (srcFormat) {
-			try {
-				CrySLModelReader cmr = new CrySLModelReader();
-				rules = cmr.readRules(IDEALCrossingTestingFramework.RESOURCE_PATH);
-			} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IOException e) {
-			}
-			
-		} else {
-			File[] listFiles = new File(IDEALCrossingTestingFramework.RESOURCE_PATH).listFiles();
-			for (File file : listFiles) {
-				if (file.getName().endsWith(".cryptslbin")) {
-					rules.add(CryptSLRuleReader.readFromFile(file));
-				}
+		File[] listFiles = new File(IDEALCrossingTestingFramework.RESOURCE_PATH + getRuleSet() +"/").listFiles();
+		for (File file : listFiles) {
+			if (file.getName().endsWith(".cryptslbin")) {
+				rules.add(CryptSLRuleReader.readFromFile(file));
 			}
 		}
 		return rules;
 	}
+	protected abstract Ruleset getRuleSet();
+
+
+
 	private Set<Assertion> extractBenchmarkMethods(SootMethod sootTestMethod) {
 		Set<Assertion> results = new HashSet<>();
 		extractBenchmarkMethods(sootTestMethod, results, new HashSet<SootMethod>());
@@ -395,8 +389,8 @@ public abstract class UsagePatternTestingFramework extends AbstractTestingFramew
 			return;
 		visited.add(m);
 		Body activeBody = m.getActiveBody();
-		for (Unit callSite : icfg.getCallsFromWithin(m)) {
-			for (SootMethod callee : icfg.getCalleesOfCallAt(callSite))
+		for (Unit callSite : staticIcfg.getCallsFromWithin(m)) {
+			for (SootMethod callee : staticIcfg.getCalleesOfCallAt(callSite))
 				extractBenchmarkMethods(callee, queries, visited);
 		}
 		for (Unit u : activeBody.getUnits()) {
