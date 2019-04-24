@@ -232,6 +232,11 @@
 			<artifactId>gson</artifactId>
 			<version>1.4</version>
 		</dependency>
+		<dependency>
+			<groupId>de.upb.testify</groupId>
+			<artifactId>commons</artifactId>
+			<version>0.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
