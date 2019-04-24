@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import crypto.analysis.Constants;
 import org.junit.Test;
 import test.UIExtractionFrameworkBasedOnUPTF;
 import test.UsagePatternTestingFramework;
@@ -109,5 +110,10 @@ public class ButtonTests extends UsagePatternTestingFramework {
 
         context.setContentView(layout);
         //Assertions.extValue(0);
+    }
+
+    @Override
+    protected Constants.Ruleset getRuleSet() {
+        return Constants.Ruleset.JavaCryptographicArchitecture;
     }
 }

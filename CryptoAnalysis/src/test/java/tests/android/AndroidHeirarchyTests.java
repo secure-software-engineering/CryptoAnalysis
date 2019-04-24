@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import crypto.analysis.Constants;
 import org.junit.Test;
 import test.UsagePatternTestingFramework;
 import test.assertions.Assertions;
@@ -104,7 +105,12 @@ public class AndroidHeirarchyTests extends UsagePatternTestingFramework {
         Assertions.extValue(0);
     }
 
-    protected class CustomActivity extends Activity{
+  @Override
+  protected Constants.Ruleset getRuleSet() {
+    return Constants.Ruleset.JavaCryptographicArchitecture;
+  }
+
+  protected class CustomActivity extends Activity{
 
      }
 

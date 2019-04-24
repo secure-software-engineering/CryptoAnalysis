@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import crypto.analysis.Constants;
 import org.junit.Test;
 import test.UsagePatternTestingFramework;
 import test.assertions.Assertions;
@@ -73,5 +74,10 @@ public class LinearLayoutTests  extends UsagePatternTestingFramework {
         Assertions.extValue(0);
         layout.setOnTouchListener((View view, MotionEvent motionEvent) -> false);
         Assertions.extValue(0);
+    }
+
+    @Override
+    protected Constants.Ruleset getRuleSet() {
+        return Constants.Ruleset.JavaCryptographicArchitecture;
     }
 }

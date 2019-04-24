@@ -3,6 +3,7 @@ package tests.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.widget.LinearLayout;
+import crypto.analysis.Constants;
 import org.junit.Test;
 import test.UsagePatternTestingFramework;
 import test.assertions.Assertions;
@@ -56,5 +57,10 @@ public class ActivityTests  extends UsagePatternTestingFramework {
         Intent intent = new Intent();
         context.setIntent(intent);
         Assertions.extValue(0);
+    }
+
+    @Override
+    protected Constants.Ruleset getRuleSet() {
+        return Constants.Ruleset.JavaCryptographicArchitecture;
     }
 }

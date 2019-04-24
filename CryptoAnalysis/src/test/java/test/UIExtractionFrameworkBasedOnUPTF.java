@@ -1,5 +1,6 @@
 package test;
 
+import crypto.analysis.Constants;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.AllocationSitesWithUIDs;
 
 import java.util.AbstractMap;
@@ -34,6 +35,11 @@ public class UIExtractionFrameworkBasedOnUPTF extends UsagePatternTestingFramewo
 
 
         return transformerFromSuperClass;
+    }
+
+    @Override
+    protected Constants.Ruleset getRuleSet() {
+        return Constants.Ruleset.JavaCryptographicArchitecture;
     }
 
     private void writeDotFile(List<AllocationSitesWithUIDs> dataUIClassHierarchy){

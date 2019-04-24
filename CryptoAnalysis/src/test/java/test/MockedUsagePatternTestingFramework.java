@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import crypto.analysis.Constants;
 import soot.Body;
 import soot.SootMethod;
 import soot.Unit;
@@ -41,7 +42,12 @@ public class MockedUsagePatternTestingFramework extends UsagePatternTestingFrame
         return listOfMockedRules;
     }
 
-    /**
+  @Override
+  protected Constants.Ruleset getRuleSet() {
+    return Constants.Ruleset.JavaCryptographicArchitecture;
+  }
+
+  /**
      * Generate a mocked class for the given class name. mockito used for mocking.
      * @param className
      * @return The mocked class

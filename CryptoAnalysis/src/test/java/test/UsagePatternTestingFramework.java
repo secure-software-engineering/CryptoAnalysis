@@ -366,7 +366,8 @@ public abstract class UsagePatternTestingFramework extends AbstractTestingFramew
 			return rules;
 		}
 
-		File[] listFiles = new File(IDEALCrossingTestingFramework.RESOURCE_PATH + getRuleSet() +"/").listFiles();
+		//File[] listFiles = new File(IDEALCrossingTestingFramework.RESOURCE_PATH + getRuleSet() +"/").listFiles();
+		File[] listFiles = new File("/home/rajiv/git/aggregator/submodules/crypto-ui/submodules/CryptoAnalysis/CryptoAnalysis/src/test/resources").listFiles();
 		for (File file : listFiles) {
 			if (file.getName().endsWith(".cryptslbin")) {
 				rules.add(CryptSLRuleReader.readFromFile(file));
