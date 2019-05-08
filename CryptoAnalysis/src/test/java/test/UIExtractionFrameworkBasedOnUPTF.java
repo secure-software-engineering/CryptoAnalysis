@@ -1,6 +1,6 @@
 package test;
 
-import crypto.analysis.Constants;
+import crypto.analysis.CrySLRulesetSelector;
 import de.upb.testify.androidmodel.ui.crypto.modelgenerator.AllocationSitesWithUIDs;
 
 import java.util.AbstractMap;
@@ -38,9 +38,10 @@ public class UIExtractionFrameworkBasedOnUPTF extends UsagePatternTestingFramewo
     }
 
     @Override
-    protected Constants.Ruleset getRuleSet() {
-        return Constants.Ruleset.JavaCryptographicArchitecture;
+    protected CrySLRulesetSelector.Ruleset getRuleSet() {
+        return CrySLRulesetSelector.Ruleset.JavaCryptographicArchitecture;
     }
+
 
     private void writeDotFile(List<AllocationSitesWithUIDs> dataUIClassHierarchy){
 

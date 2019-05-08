@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import crypto.analysis.Constants;
+import crypto.analysis.CrySLRulesetSelector;
 import org.junit.Test;
 import test.UsagePatternTestingFramework;
 
@@ -32,7 +32,7 @@ public class IntentTests extends UsagePatternTestingFramework {
     }
 
     @Override
-    protected Constants.Ruleset getRuleSet() {
-        return Constants.Ruleset.JavaCryptographicArchitecture;
+    protected CrySLRulesetSelector.Ruleset getRuleSet() {
+        return CrySLRulesetSelector.Ruleset.JavaCryptographicArchitecture;
     }
 }

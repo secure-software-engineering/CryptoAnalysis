@@ -25,9 +25,10 @@ import boomerang.preanalysis.BoomerangPretransformer;
 import boomerang.results.ForwardBoomerangResults;
 import crypto.Utils;
 import crypto.analysis.AnalysisSeedWithSpecification;
-import crypto.analysis.Constants.Ruleset;
 import crypto.analysis.CrySLAnalysisListener;
 import crypto.analysis.CrySLResultsReporter;
+import crypto.analysis.CrySLRulesetSelector;
+import crypto.analysis.CrySLRulesetSelector.Ruleset;
 import crypto.analysis.CryptoScanner;
 import crypto.analysis.EnsuredCryptSLPredicate;
 import crypto.analysis.IAnalysisSeed;
@@ -46,7 +47,6 @@ import crypto.extractparameter.ExtractedValue;
 import crypto.interfaces.ISLConstraint;
 import crypto.rules.CryptSLPredicate;
 import crypto.rules.CryptSLRule;
-import crypto.rules.CryptSLRuleReader;
 import soot.Body;
 import soot.Local;
 import soot.SceneTransformer;
@@ -79,7 +79,7 @@ public abstract class UsagePatternTestingFramework extends AbstractTestingFramew
 
 	protected ObservableICFG<Unit, SootMethod> icfg;
 	private JimpleBasedInterproceduralCFG staticIcfg;
-	List<CryptSLRule> rules = Lists.newArrayList();
+	List<CryptSLRule> rules;
 	
 	@Override
 	protected SceneTransformer createAnalysisTransformer() throws ImprecisionException {
@@ -314,19 +314,8 @@ public abstract class UsagePatternTestingFramework extends AbstractTestingFramew
 						reporters.addReportListener(cryslListener);
 						return reporters;
 					}
-
-					@Override
-					public boolean isCommandLineMode() {
-						return true;
-					}
-
-					@Override
-					public boolean rulesInSrcFormat() {
-						return false;
-					}
-
 				};
-				scanner.scan(getRules(scanner.rulesInSrcFormat()));
+				scanner.scan(getRules());
 				
 				List<Assertion> unsound = Lists.newLinkedList();
 				List<Assertion> imprecise = Lists.newLinkedList();
@@ -347,34 +336,26 @@ public abstract class UsagePatternTestingFramework extends AbstractTestingFramew
 				}
 			}
 
+
 		};
 	}
 
-
-
+	private List<CryptSLRule> getRules() {
+		if(rules == null) {
+			rules = CrySLRulesetSelector.makeFromRuleset(IDEALCrossingTestingFramework.RULES_BASE_DIR, getRuleSet());
+			rules.addAll(CrySLRulesetSelector.makeFromPath(new File("/home/rajiv/git/aggregator/submodules/crypto-ui/submodules/CryptoAnalysis/CryptoAnalysis/src/main/resources")));
+		}
+		return rules;
+	}
 	@Override
 	public List<String> excludedPackages() {
 		List<String> excludedPackages = super.excludedPackages();
-		for(CryptSLRule r : getRules(false)) {
+		for(CryptSLRule r : getRules()) {
 			excludedPackages.add(Utils.getFullyQualifiedName(r));
 		}
 		return excludedPackages;
 	}
 	
-	protected List<CryptSLRule> getRules(boolean srcFormat) {
-		if (!rules.isEmpty()) {
-			return rules;
-		}
-
-		//File[] listFiles = new File(IDEALCrossingTestingFramework.RESOURCE_PATH + getRuleSet() +"/").listFiles();
-		File[] listFiles = new File("/home/rajiv/git/aggregator/submodules/crypto-ui/submodules/CryptoAnalysis/CryptoAnalysis/src/test/resources").listFiles();
-		for (File file : listFiles) {
-			if (file.getName().endsWith(".cryptslbin")) {
-				rules.add(CryptSLRuleReader.readFromFile(file));
-			}
-		}
-		return rules;
-	}
 	protected abstract Ruleset getRuleSet();
 
 

@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import crypto.analysis.Constants;
+import crypto.analysis.CrySLRulesetSelector;
 import org.junit.Test;
 import test.UsagePatternTestingFramework;
 import test.assertions.Assertions;
@@ -106,9 +106,10 @@ public class AndroidHeirarchyTests extends UsagePatternTestingFramework {
     }
 
   @Override
-  protected Constants.Ruleset getRuleSet() {
-    return Constants.Ruleset.JavaCryptographicArchitecture;
+  protected CrySLRulesetSelector.Ruleset getRuleSet() {
+    return null;
   }
+
 
   protected class CustomActivity extends Activity{
 
