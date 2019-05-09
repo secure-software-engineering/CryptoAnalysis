@@ -3,7 +3,7 @@ package tests.android;
 import android.app.Activity;
 import android.content.Intent;
 import android.widget.LinearLayout;
-import crypto.analysis.Constants;
+import crypto.analysis.CrySLRulesetSelector;
 import org.junit.Test;
 import test.UsagePatternTestingFramework;
 import test.assertions.Assertions;
@@ -60,7 +60,7 @@ public class ActivityTests  extends UsagePatternTestingFramework {
     }
 
     @Override
-    protected Constants.Ruleset getRuleSet() {
-        return Constants.Ruleset.JavaCryptographicArchitecture;
+    protected CrySLRulesetSelector.Ruleset getRuleSet() {
+        return CrySLRulesetSelector.Ruleset.JavaCryptographicArchitecture;
     }
 }

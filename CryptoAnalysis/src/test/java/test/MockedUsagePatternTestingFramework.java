@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import crypto.analysis.Constants;
+import crypto.analysis.CrySLRulesetSelector;
 import soot.Body;
 import soot.SootMethod;
 import soot.Unit;
@@ -27,11 +27,12 @@ import test.assertions.Assertions;
 
 public class MockedUsagePatternTestingFramework extends UsagePatternTestingFramework {
     private String[] classesToMock;
-    @Override
+    // TODO fix this. These changes are temporary to make the merge successful.
+    //@Override
   protected List<CryptSLRule> getRules(boolean srcFormat) {
 
         if (getClassesToMock() == null){
-      return super.getRules(srcFormat);
+      //return super.getRules(srcFormat);
         }
         List<CryptSLRule> listOfMockedRules = Lists.newArrayList();
 
@@ -42,10 +43,6 @@ public class MockedUsagePatternTestingFramework extends UsagePatternTestingFrame
         return listOfMockedRules;
     }
 
-  @Override
-  protected Constants.Ruleset getRuleSet() {
-    return Constants.Ruleset.JavaCryptographicArchitecture;
-  }
 
   /**
      * Generate a mocked class for the given class name. mockito used for mocking.
@@ -77,7 +74,12 @@ public class MockedUsagePatternTestingFramework extends UsagePatternTestingFrame
         return mockedRule;
     }
 
-    @Override
+  @Override
+  protected CrySLRulesetSelector.Ruleset getRuleSet() {
+    return CrySLRulesetSelector.Ruleset.JavaCryptographicArchitecture;
+  }
+
+  @Override
     protected void extractBenchmarkMethods(SootMethod m, Set<Assertion> queries, Set<SootMethod> visited){
         if (!m.hasActiveBody() || visited.contains(m))
             return;

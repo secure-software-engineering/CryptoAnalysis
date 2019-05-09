@@ -6,7 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import crypto.analysis.Constants;
+import crypto.analysis.CrySLRulesetSelector;
 import org.junit.Test;
 import test.UIExtractionFrameworkBasedOnUPTF;
 import test.UsagePatternTestingFramework;
@@ -113,7 +113,7 @@ public class ButtonTests extends UsagePatternTestingFramework {
     }
 
     @Override
-    protected Constants.Ruleset getRuleSet() {
-        return Constants.Ruleset.JavaCryptographicArchitecture;
+    protected CrySLRulesetSelector.Ruleset getRuleSet() {
+        return CrySLRulesetSelector.Ruleset.JavaCryptographicArchitecture;
     }
 }
