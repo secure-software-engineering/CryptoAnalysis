@@ -128,6 +128,7 @@ public class AnalysisSeedWithSpecification extends IAnalysisSeed {
 
 		Multimap<Statement, State> unitToStates = HashMultimap.create();
 		for (Cell<Statement, Val, TransitionFunction> c : results.asStatementValWeightTable().cellSet()) {
+			System.out.println(c);
 			unitToStates.putAll(c.getRowKey(), getTargetStates(c.getValue()));
 			for (EnsuredCryptSLPredicate pred : indirectlyEnsuredPredicates) {
 				// TODO only maintain indirectly ensured predicate as long as they are not
