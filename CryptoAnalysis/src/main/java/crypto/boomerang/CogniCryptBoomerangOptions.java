@@ -98,7 +98,7 @@ public class CogniCryptBoomerangOptions extends DefaultBoomerangOptions {
 
 	@Override
 	public int analysisTimeoutMS() {
-		return 5000;
+		return 500000000;
 	}
 	
 	@Override

@@ -343,7 +343,7 @@ public abstract class UsagePatternTestingFramework extends AbstractTestingFramew
 	private List<CryptSLRule> getRules() {
 		if(rules == null) {
 			rules = CrySLRulesetSelector.makeFromRuleset(IDEALCrossingTestingFramework.RULES_BASE_DIR, getRuleSet());
-			rules.addAll(CrySLRulesetSelector.makeFromPath(new File("/home/rajiv/git/aggregator/submodules/crypto-ui/submodules/CryptoAnalysis/CryptoAnalysis/src/main/resources")));
+			rules.addAll(CrySLRulesetSelector.makeFromPath(new File(IDEALCrossingTestingFramework.RULES_BASE_DIR)));
 		}
 		return rules;
 	}
