@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import boomerang.WeightedForwardQuery;
+import boomerang.jimple.AllocVal;
+import boomerang.jimple.Statement;
 import soot.RefType;
 import soot.SootMethod;
 import soot.Type;
@@ -13,7 +16,6 @@ import soot.Unit;
 import soot.jimple.AssignStmt;
 import soot.jimple.InstanceInvokeExpr;
 import soot.jimple.InvokeExpr;
-import soot.jimple.NewExpr;
 import soot.jimple.Stmt;
 
 import boomerang.WeightedForwardQuery;

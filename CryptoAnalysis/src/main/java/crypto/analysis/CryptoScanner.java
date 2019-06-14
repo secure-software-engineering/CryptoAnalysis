@@ -36,7 +36,6 @@ import soot.Scene;
 import soot.SootMethod;
 import soot.Unit;
 import soot.jimple.toolkits.callgraph.ReachableMethods;
-import soot.jimple.toolkits.ide.icfg.BiDiInterproceduralCFG;
 import soot.util.queue.QueueReader;
 import sync.pds.solver.nodes.Node;
 import typestate.TransitionFunction;
