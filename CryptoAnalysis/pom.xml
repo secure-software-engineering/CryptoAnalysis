@@ -8,10 +8,8 @@
 	
 	<properties>
    	 	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>  
-   	 	<sootVersion>3.2.0</sootVersion>
-   	 	<spdsVersion>2.3</spdsVersion>
+   	 	<spdsVersion>2.4-SNAPSHOT</spdsVersion>
 	</properties>
-
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -58,7 +56,7 @@
 								<artifactItem>
 									<groupId>de.darmstadt.tu.crossing</groupId>
 									<artifactId>JavaCryptographicArchitecture</artifactId>
-									<version>1.0</version>
+									<version>1.1</version>
 									<classifier>ruleset</classifier>
 									<type>zip</type>
 									<overWrite>true</overWrite>
@@ -68,7 +66,7 @@
 								<artifactItem>
 									<groupId>de.fraunhofer.iem</groupId>
 									<artifactId>BouncyCastle</artifactId>
-									<version>0.4</version>
+									<version>0.6</version>
 									<classifier>ruleset</classifier>
 									<type>zip</type>
 									<overWrite>true</overWrite>
@@ -78,7 +76,7 @@
 								<artifactItem>
 									<groupId>de.darmstadt.tu.crossing</groupId>
 									<artifactId>Tink</artifactId>
-									<version>0.1</version>
+									<version>0.2</version>
 									<classifier>ruleset</classifier>
 									<type>zip</type>
 									<overWrite>true</overWrite>
@@ -140,29 +138,29 @@
 				</configuration>
 			</plugin>
 
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <descriptors>
-                        <!-- custom descriptor is copied from jar-with-dependencies -->
-                        <!-- This also copies the rules from test resources as default rules
-                            into the jar -->
-                        <descriptor>build/descriptor.xml</descriptor>
-                    </descriptors>
-                    <outputDirectory>build</outputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptors>
+						<!-- custom descriptor is copied from jar-with-dependencies -->
+						<!-- This also copies the rules from test resources as default rules 
+							into the jar -->
+						<descriptor>build/descriptor.xml</descriptor>
+					</descriptors>
+					<outputDirectory>build</outputDirectory>
+				</configuration>
+			</plugin>
+				
+		</plugins>
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -215,144 +213,26 @@
 			<version>1.4</version>
 		</dependency>
 		<dependency>
-			<groupId>de.upb.testify</groupId>
-			<artifactId>commons</artifactId>
-			<version>0.2-SNAPSHOT</version>
+		    <groupId>de.darmstadt.tu.crossing.CryptSL</groupId>
+		    <artifactId>de.darmstadt.tu.crossing.CryptSL</artifactId>
+		    <version>1.0.0-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.android</groupId>
-			<artifactId>android</artifactId>
-			<version>2.3.3</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>2.8.9</version>
-		</dependency>
-		<dependency>
-			<groupId>ca.mcgill.sable</groupId>
-			<artifactId>soot-testify</artifactId>
-			<version>3.3.0-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>de.fraunhofer.iem</groupId>
-			<artifactId>idealPDS</artifactId>
-			<version>${spdsVersion}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>ca.mcgill.sable</groupId>
-					<artifactId>soot</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>de.fraunhofer.iem</groupId>
-			<artifactId>testCore</artifactId>
-			<version>${spdsVersion}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>ca.mcgill.sable</groupId>
-					<artifactId>soot</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>de.darmstadt.tu.crossing.CryptSL</groupId>
-			<artifactId>de.darmstadt.tu.crossing.CryptSL</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.ecore</artifactId>
-			<version>2.15.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.emf</groupId>
-			<artifactId>org.eclipse.emf.common</artifactId>
-			<version>2.15.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.platform</groupId>
-			<artifactId>org.eclipse.core.runtime</artifactId>
-			<version>3.15.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.platform</groupId>
-			<artifactId>org.eclipse.equinox.common</artifactId>
-			<version>3.10.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.platform</groupId>
-			<artifactId>org.eclipse.equinox.registry</artifactId>
-			<version>3.8.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.emf.ecore</groupId>
-			<artifactId>change</artifactId>
-			<version>2.3.0-v200706262000</version>
-		</dependency>
-
-
-		<dependency>
-			<groupId>org.eclipse.emf.ecore</groupId>
-			<artifactId>xmi</artifactId>
-			<version>2.3.0-v200706262000</version>
-		</dependency>
-
 		<dependency>
 			<groupId>org.eclipse.xtext</groupId>
-			<artifactId>org.eclipse.xtext</artifactId>
-			<version>2.15.0</version>
-
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
+			<artifactId>org.eclipse.xtext.xbase</artifactId>
+			<version>2.18.0</version>
 		</dependency>
-
+		<!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.common -->
 		<dependency>
-			<groupId>org.eclipse.xtext</groupId>
-			<artifactId>org.eclipse.xtext.common.types</artifactId>
-			<version>2.15.0</version>
+		    <groupId>org.eclipse.emf</groupId>
+		    <artifactId>org.eclipse.emf.common</artifactId>
+		    <version>2.15.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-invoker-plugin -->
+		<!-- https://mvnrepository.com/artifact/org.eclipse.emf/org.eclipse.emf.ecore -->
 		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-invoker-plugin</artifactId>
-			<version>3.1.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>1.4</version>
+		    <groupId>org.eclipse.emf</groupId>
+		    <artifactId>org.eclipse.emf.ecore</artifactId>
+		    <version>2.15.0</version>
 		</dependency>
 	</dependencies>
 
@@ -381,7 +261,6 @@
 				<enabled>false</enabled>
 			</releases>
 		</repository>
-
 		<repository>
 			<id>soot-release</id>
 			<name>soot release</name>
